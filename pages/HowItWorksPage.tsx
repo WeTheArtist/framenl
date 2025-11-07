@@ -1,0 +1,35 @@
+import React from 'react';
+
+const Step: React.FC<{ number: string, title: string, children: React.ReactNode}> = ({number, title, children}) => (
+    <div className="bg-white p-8 rounded-2xl border border-gray-200/80 shadow-lg">
+        <span className="text-4xl font-bold text-[#FF7D6B]">{number}</span>
+        <h3 className="mt-4 text-2xl font-bold text-[#2C3E50]">{title}</h3>
+        <p className="mt-2 text-[#5A6A78]">{children}</p>
+    </div>
+);
+
+export const HowItWorksPage: React.FC = () => {
+  return (
+    <div className="bg-[#FFF9F5]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <header className="text-center mb-12">
+            <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">How It Works</h1>
+            <p className="mt-4 max-w-2xl mx-auto text-lg text-[#5A6A78]">
+                Finding your perfect photographer is as easy as 1-2-3.
+            </p>
+        </header>
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Step number="01" title="Search & Discover">
+                Use our powerful search and filters to browse profiles of talented photographers. Compare portfolios, specialties, and pricing instantly.
+            </Step>
+            <Step number="02" title="Request to Book">
+                Found the one? Select a date and package, and send a booking request directly to the photographer. You'll get a confirmation quickly.
+            </Step>
+            <Step number="03" title="Capture the Moment">
+                Coordinate with your photographer, have an amazing photoshoot, and receive your beautiful photos. It's that simple!
+            </Step>
+        </div>
+      </div>
+    </div>
+  );
+};
