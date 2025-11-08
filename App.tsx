@@ -49,12 +49,12 @@ const App: React.FC = () => {
   const [selectedPhotographer, setSelectedPhotographer] = useState<Photographer | null>(null);
   
   const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem('frameNLUser');
+    const savedUser = localStorage.getItem('inFramenIUser');
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
   const [moodBoard, setMoodBoard] = useState<MoodBoardItem[]>(() => {
-    const saved = localStorage.getItem('frameNLMoodBoard');
+    const saved = localStorage.getItem('inFramenIMoodBoard');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -63,14 +63,14 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('frameNLUser', JSON.stringify(user));
+      localStorage.setItem('inFramenIUser', JSON.stringify(user));
     } else {
-      localStorage.removeItem('frameNLUser');
+      localStorage.removeItem('inFramenIUser');
     }
   }, [user]);
 
   useEffect(() => {
-    localStorage.setItem('frameNLMoodBoard', JSON.stringify(moodBoard));
+    localStorage.setItem('inFramenIMoodBoard', JSON.stringify(moodBoard));
   }, [moodBoard]);
 
 

@@ -31,7 +31,7 @@ export const CareersPage: React.FC = () => {
             </div>
             <div className="mt-12 text-center bg-[#FFF9F5] p-8 rounded-2xl">
                  <h3 className="font-semibold text-xl text-[#2C3E50]">Don't see your role?</h3>
-                 <p className="text-[#5A6A78] mt-2">We're always looking for talented people. If you think you'd be a great fit, send your resume and a note to <a href="mailto:careers@framenl.com" className="text-[#FF7D6B] font-medium hover:text-[#E86A5A]">careers@framenl.com</a>.</p>
+                 <p className="text-[#5A6A78] mt-2">We're always looking for talented people. If you think you'd be a great fit, send your resume and a note to <a href="mailto:careers@inframeni.com" className="text-[#FF7D6B] font-medium hover:text-[#E86A5A]">careers@inframeni.com</a>.</p>
             </div>
         </div>
       </div>

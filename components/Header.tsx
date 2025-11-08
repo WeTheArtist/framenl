@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user
         <div className="flex items-center justify-between h-20">
           <div className="flex-shrink-0 cursor-pointer" onClick={() => onNavigate('home')}>
             <h1 className="text-2xl font-bold text-[#2C3E50] tracking-tight">
-              Frame<span className="text-[#FF7D6B]">NL</span>
+              In<span className="text-[#FF7D6B]">Frame</span>nI
             </h1>
           </div>
           <nav className="hidden md:flex items-center space-x-8">
@@ -49,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user
           </div>
           <div className="md:hidden">
             <button className="text-[#5A6A78] hover:text-[#FF7D6B] focus:outline-none">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
             </button>
           </div>
         </div>

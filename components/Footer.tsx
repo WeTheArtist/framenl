@@ -17,7 +17,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-bold text-lg mb-4">FrameNL</h3>
+            <h3 className="font-bold text-lg mb-4">In<span className="text-[#FF7D6B]">Frame</span>nI</h3>
             <p className="text-sm text-gray-300">Connecting talent with moments.</p>
           </div>
           <div>
@@ -46,7 +46,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
         </div>
         <div className="mt-12 border-t border-slate-700 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} FrameNL. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} InFramenI. All rights reserved.</p>
         </div>
       </div>
     </footer>

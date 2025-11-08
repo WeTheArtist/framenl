@@ -14,7 +14,7 @@ export const AboutUsPage: React.FC = () => {
             
             <div className="text-lg text-[#5A6A78] space-y-6 leading-relaxed">
                 <p>
-                    FrameNL was born from a simple idea: the best photographers should be easy to find. In a country as rich with creativity as the Netherlands, we saw a gap between clients seeking high-quality photography and the artists ready to create it.
+                    InFramenI was born from a simple idea: the best photographers should be easy to find. In a country as rich with creativity as the Netherlands, we saw a gap between clients seeking high-quality photography and the artists ready to create it.
                 </p>
                 <p>
                     We are a small, passionate team based in Amsterdam, dedicated to building a platform that is beautiful, functional, and fair. For clients, we offer a curated, user-friendly experience with transparent pricing. For photographers, we provide the tools to showcase their work, manage their business, and connect with a steady stream of clients without the hassle of marketing.
