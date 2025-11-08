@@ -1,13 +1,17 @@
+
 import React from 'react';
 import { Button } from './Button';
 import type { Page } from '../App';
+import type { User } from '../types';
 
 interface HeaderProps {
   onNavigate: (page: Page) => void;
   moodBoardCount: number;
+  user: User | null;
+  onLogout: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount }) => {
+export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user, onLogout }) => {
   return (
     <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,8 +35,17 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount }) =>
             <a onClick={() => onNavigate('photographerDashboard')} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer transition-colors">For Photographers</a>
           </nav>
           <div className="hidden md:flex items-center space-x-2">
-            <Button variant="ghost" onClick={() => onNavigate('login')}>Log In</Button>
-            <Button variant="primary" onClick={() => onNavigate('signup')}>Sign Up</Button>
+            {user ? (
+                <>
+                    <span className="text-sm text-[#5A6A78]">Welcome, {user.name}!</span>
+                    <Button variant="ghost" onClick={onLogout}>Log Out</Button>
+                </>
+            ) : (
+                <>
+                    <Button variant="ghost" onClick={() => onNavigate('login')}>Log In</Button>
+                    <Button variant="primary" onClick={() => onNavigate('signup')}>Sign Up</Button>
+                </>
+            )}
           </div>
           <div className="md:hidden">
             <button className="text-[#5A6A78] hover:text-[#FF7D6B] focus:outline-none">

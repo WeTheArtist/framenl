@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import type { Photographer, MoodBoardItem } from '../types';
+
+import React, { useState, useMemo } from 'react';
+import type { Photographer, MoodBoardItem, BookingPackage } from '../types';
 import { Button } from '../components/Button';
 import { StarIcon, VerifiedIcon, MapPinIcon, ArrowLeftIcon, BookmarkIcon } from '../components/IconComponents';
 import { Calendar } from '../components/Calendar';
@@ -9,9 +10,10 @@ interface ProfilePageProps {
   onBack: () => void;
   onAddToMoodBoard: (item: MoodBoardItem) => void;
   moodBoard: MoodBoardItem[];
+  onBookNow: (details: {date: string, pkg: BookingPackage, notes: string}) => void;
 }
 
-type ProfileTab = 'portfolio' | 'packages' | 'reviews' | 'availability';
+type ProfileTab = 'portfolio' | 'packages' | 'reviews' | 'about';
 
 const ProfileHeader: React.FC<{ photographer: Photographer }> = ({ photographer }) => (
     <div className="relative h-64 md:h-96 w-full">
@@ -45,8 +47,6 @@ const PortfolioSection: React.FC<{
     moodBoard: MoodBoardItem[];
 }> = ({ photographer, onAddToMoodBoard, moodBoard }) => (
     <div>
-      <h3 className="text-3xl font-bold mb-4 text-[#2C3E50]">About {photographer.name}</h3>
-      <p className="text-[#5A6A78] leading-relaxed whitespace-pre-line mb-12">{photographer.bio}</p>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {photographer.portfolioImages.map((img, index) => {
             const isInMoodBoard = moodBoard.some(item => item.imageUrl === img);
@@ -70,6 +70,14 @@ const PortfolioSection: React.FC<{
       </div>
     </div>
 );
+
+const AboutSection: React.FC<{ bio: string }> = ({ bio }) => (
+    <div>
+        <h3 className="text-3xl font-bold mb-4 text-[#2C3E50]">About</h3>
+        <p className="text-[#5A6A78] leading-relaxed whitespace-pre-line">{bio}</p>
+    </div>
+);
+
 
 const PricingSection: React.FC<{ packages: Photographer['packages'] }> = ({ packages }) => (
     <div className="space-y-6">
@@ -123,17 +131,19 @@ const ReviewsSection: React.FC<{ reviews: Photographer['reviews'], rating: numbe
     </div>
 );
 
-const AvailabilitySection: React.FC<{ bookedDates: string[] }> = ({ bookedDates }) => (
-    <div>
-        <h3 className="text-3xl font-bold mb-4 text-[#2C3E50]">Availability</h3>
-        <p className="text-[#5A6A78] leading-relaxed mb-8">This calendar shows the photographer's booked dates. All other dates are potentially available. Please use the booking form to confirm a specific date.</p>
-        <Calendar bookedDates={new Set(bookedDates)} />
-    </div>
-);
-
-
-export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, onAddToMoodBoard, moodBoard }) => {
+export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, onAddToMoodBoard, moodBoard, onBookNow }) => {
   const [activeTab, setActiveTab] = useState<ProfileTab>('portfolio');
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedPackageId, setSelectedPackageId] = useState<string>(photographer.packages[0].id);
+  const [notes, setNotes] = useState('');
+
+  const selectedPackage = useMemo(() => {
+    return photographer.packages.find(p => p.id === selectedPackageId) || photographer.packages[0];
+  }, [selectedPackageId, photographer.packages]);
+  
+  const isDateBooked = useMemo(() => {
+    return photographer.bookedDates.includes(selectedDate);
+  }, [selectedDate, photographer.bookedDates]);
 
   const TabButton: React.FC<{tab: ProfileTab; label: string}> = ({tab, label}) => (
     <button
@@ -165,7 +175,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, 
                     <TabButton tab="portfolio" label="Portfolio" />
                     <TabButton tab="packages" label="Packages" />
                     <TabButton tab="reviews" label="Reviews" />
-                    <TabButton tab="availability" label="Availability" />
+                    <TabButton tab="about" label="About" />
                 </nav>
             </div>
 
@@ -173,34 +183,50 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, 
                 {activeTab === 'portfolio' && <PortfolioSection photographer={photographer} onAddToMoodBoard={onAddToMoodBoard} moodBoard={moodBoard} />}
                 {activeTab === 'packages' && <PricingSection packages={photographer.packages} />}
                 {activeTab === 'reviews' && <ReviewsSection reviews={photographer.reviews} rating={photographer.rating} reviewCount={photographer.reviewCount} />}
-                {activeTab === 'availability' && <AvailabilitySection bookedDates={photographer.bookedDates} />}
+                {activeTab === 'about' && <AboutSection bio={photographer.bio} />}
             </div>
           </div>
 
           <aside className="lg:col-span-1">
             <div className="sticky top-28 bg-[#FFF9F5] p-6 rounded-2xl border border-gray-200/80">
               <h3 className="text-2xl font-bold text-center text-[#2C3E50]">Book {photographer.name}</h3>
-              <p className="text-center text-sm text-[#5A6A78] mt-1">Starting from €{photographer.startingPrice}</p>
               
               <div className="mt-6 space-y-4">
                  <div>
-                    <label htmlFor="date" className="block text-sm font-medium text-[#2C3E50]">Date</label>
-                    <input type="date" id="date" className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
+                    <label className="block text-sm font-medium text-[#2C3E50] mb-2">1. Select a Date</label>
+                    <Calendar 
+                        bookedDates={new Set(photographer.bookedDates)} 
+                        interactive={true}
+                        onDateClick={setSelectedDate}
+                        selectedDate={selectedDate}
+                    />
+                    {isDateBooked && <p className="text-xs text-red-600 mt-1">This date is already booked. Please select another.</p>}
                  </div>
                  <div>
-                    <label htmlFor="package" className="block text-sm font-medium text-[#2C3E50]">Package</label>
-                    <select id="package" className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm">
-                        {photographer.packages.map(p => <option key={p.id}>{p.name}</option>)}
+                    <label htmlFor="package" className="block text-sm font-medium text-[#2C3E50]">2. Choose a Package</label>
+                    <select id="package" value={selectedPackageId} onChange={e => setSelectedPackageId(e.target.value)} className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm">
+                        {photographer.packages.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                     </select>
+                 </div>
+                 <div>
+                    <label htmlFor="notes" className="block text-sm font-medium text-[#2C3E50]">3. Add a Note (Optional)</label>
+                    <textarea 
+                        id="notes" 
+                        rows={3}
+                        value={notes}
+                        onChange={e => setNotes(e.target.value)}
+                        className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm"
+                        placeholder="Any details for the photographer? (e.g., occasion, location ideas, number of people)"
+                    ></textarea>
                  </div>
               </div>
 
               <div className="mt-8 border-t border-gray-200/80 pt-6">
                 <div className="flex justify-between items-center font-bold text-xl text-[#2C3E50]">
                     <span>Quote Total</span>
-                    <span>€{photographer.startingPrice}</span>
+                    <span>€{selectedPackage.price}</span>
                 </div>
-                 <Button className="w-full mt-4 text-lg !py-3">Request to Book</Button>
+                 <Button onClick={() => onBookNow({date: selectedDate, pkg: selectedPackage, notes})} disabled={!selectedDate || isDateBooked} className="w-full mt-4 text-lg !py-3">Request to Book</Button>
               </div>
 
             </div>

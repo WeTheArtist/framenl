@@ -1,12 +1,14 @@
+
 import React, { useState } from 'react';
 
 interface CalendarProps {
   bookedDates: Set<string>; // Expecting 'YYYY-MM-DD'
+  selectedDate?: string;
   onDateClick?: (date: string) => void;
   interactive?: boolean;
 }
 
-export const Calendar: React.FC<CalendarProps> = ({ bookedDates, onDateClick, interactive = false }) => {
+export const Calendar: React.FC<CalendarProps> = ({ bookedDates, selectedDate, onDateClick, interactive = false }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -56,20 +58,23 @@ export const Calendar: React.FC<CalendarProps> = ({ bookedDates, onDateClick, in
           const dateString = toYyyyMmDd(date);
           const isBooked = bookedDates.has(dateString);
           const isCurrentMonth = date.getMonth() === currentDate.getMonth();
+          const isSelected = dateString === selectedDate;
 
           let classes = "w-10 h-10 flex items-center justify-center rounded-full transition-colors ";
           if (isCurrentMonth) {
             if (isBooked) {
               classes += "bg-gray-300 text-gray-500 line-through cursor-not-allowed";
+            } else if (isSelected) {
+              classes += "bg-[#FF7D6B] text-white font-bold";
             } else if (interactive) {
-              classes += "cursor-pointer hover:bg-[#FF7D6B] hover:text-white";
+              classes += "cursor-pointer hover:bg-orange-100";
             } else {
                classes += "text-gray-700";
             }
           } else {
             classes += "text-gray-300";
           }
-          if(isToday(date) && !isBooked) classes += " bg-[#FF7D6B]/20 text-[#E86A5A] font-bold";
+          if(isToday(date) && !isBooked && !isSelected) classes += " bg-orange-100/50 text-[#E86A5A]";
 
           return (
             <div
@@ -85,6 +90,7 @@ export const Calendar: React.FC<CalendarProps> = ({ bookedDates, onDateClick, in
        <div className="mt-4 flex items-center justify-center space-x-4 text-xs">
           <div className="flex items-center"><span className="w-3 h-3 bg-white border rounded-full mr-1.5"></span> Available</div>
           <div className="flex items-center"><span className="w-3 h-3 bg-gray-300 rounded-full mr-1.5"></span> Booked</div>
+          {interactive && <div className="flex items-center"><span className="w-3 h-3 bg-[#FF7D6B] rounded-full mr-1.5"></span> Selected</div>}
         </div>
     </div>
   );

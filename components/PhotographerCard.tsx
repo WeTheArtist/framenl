@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Photographer } from '../types';
 import { StarIcon, VerifiedIcon, MapPinIcon } from './IconComponents';
-import { Button } from './Button';
 
 interface PhotographerCardProps {
   photographer: Photographer;
@@ -9,8 +8,22 @@ interface PhotographerCardProps {
 }
 
 export const PhotographerCard: React.FC<PhotographerCardProps> = ({ photographer, onViewProfile }) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onViewProfile(photographer);
+    }
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200/80 transition-all duration-300 hover:shadow-xl flex flex-col">
+    <div
+      className="bg-white rounded-2xl shadow-sm border border-gray-200/80 transition-all duration-300 hover:shadow-xl flex flex-col cursor-pointer"
+      onClick={() => onViewProfile(photographer)}
+      onKeyPress={handleKeyPress}
+      role="button"
+      tabIndex={0}
+      aria-label={`View profile for ${photographer.name}`}
+    >
       <div className="relative">
         <img
           className="w-full h-56 object-cover rounded-t-2xl"
@@ -47,9 +60,6 @@ export const PhotographerCard: React.FC<PhotographerCardProps> = ({ photographer
                     <span className="text-sm text-[#5A6A78]">Starting from</span>
                     <p className="text-xl font-bold text-[#2C3E50]">€{photographer.startingPrice}</p>
                 </div>
-                 <Button onClick={() => onViewProfile(photographer)} variant="secondary" className="px-5 !py-2 text-sm">
-                    View
-                 </Button>
             </div>
         </div>
       </div>

@@ -1,12 +1,14 @@
+
 import React from 'react';
 import type { Photographer } from '../types';
-import { CATEGORIES, TESTIMONIALS, PHOTOGRAPHERS } from '../constants';
+import { CATEGORIES, TESTIMONIALS } from '../constants';
 import { PhotographerCard } from '../components/PhotographerCard';
 import { Button } from '../components/Button';
 import { StarIcon } from '../components/IconComponents';
 import { AiRecommendation } from '../components/AiRecommendation';
 
 interface HomePageProps {
+  photographers: Photographer[];
   onSearch: () => void;
   onViewProfile: (photographer: Photographer) => void;
 }
@@ -38,7 +40,7 @@ const Hero: React.FC<{ onSearch: () => void }> = ({ onSearch }) => (
   </div>
 );
 
-const FeaturedPhotographers: React.FC<{ onViewProfile: (photographer: Photographer) => void }> = ({ onViewProfile }) => (
+const FeaturedPhotographers: React.FC<{ photographers: Photographer[], onViewProfile: (photographer: Photographer) => void }> = ({ photographers, onViewProfile }) => (
   <div className="py-16 sm:py-24 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <h2 className="text-4xl font-bold tracking-tight text-center text-[#2C3E50]">Featured Photographers</h2>
@@ -46,7 +48,7 @@ const FeaturedPhotographers: React.FC<{ onViewProfile: (photographer: Photograph
         Handpicked professionals with exceptional talent and proven client satisfaction.
       </p>
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {PHOTOGRAPHERS.slice(0, 3).map(p => (
+        {photographers.slice(0, 3).map(p => (
           <PhotographerCard key={p.id} photographer={p} onViewProfile={onViewProfile} />
         ))}
       </div>
@@ -54,13 +56,13 @@ const FeaturedPhotographers: React.FC<{ onViewProfile: (photographer: Photograph
   </div>
 );
 
-const Categories: React.FC = () => (
+const Categories: React.FC<{ onNavigate: () => void }> = ({ onNavigate }) => (
   <div className="py-16 sm:py-24 bg-[#FFF9F5]">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
        <h2 className="text-4xl font-bold tracking-tight text-center text-[#2C3E50]">Explore by Category</h2>
        <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
         {CATEGORIES.map(category => (
-          <div key={category.name} className="relative group rounded-xl overflow-hidden cursor-pointer shadow-sm">
+          <div key={category.name} onClick={onNavigate} className="relative group rounded-xl overflow-hidden cursor-pointer shadow-sm">
             <img src={category.imageUrl} alt={category.name} className="w-full h-48 object-cover transform transition-transform duration-300 group-hover:scale-110" />
             <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center p-2">
               <h3 className="text-white text-lg font-semibold text-center">{category.name}</h3>
@@ -94,15 +96,15 @@ const Testimonials: React.FC = () => (
   </div>
 );
 
-export const HomePage: React.FC<HomePageProps> = ({ onSearch, onViewProfile }) => {
+export const HomePage: React.FC<HomePageProps> = ({ photographers, onSearch, onViewProfile }) => {
   return (
     <>
       <Hero onSearch={onSearch} />
-      <FeaturedPhotographers onViewProfile={onViewProfile} />
-      <Categories />
+      <FeaturedPhotographers photographers={photographers} onViewProfile={onViewProfile} />
+      <Categories onNavigate={onSearch} />
        <div className="py-16 sm:py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-            <AiRecommendation photographer={PHOTOGRAPHERS[0]} />
+            <AiRecommendation photographer={photographers[0]} />
         </div>
       </div>
       <Testimonials />

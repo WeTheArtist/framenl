@@ -48,3 +48,8 @@ export interface MoodBoardItem {
   photographerName: string;
   imageUrl: string;
 }
+
+export interface User {
+  isLoggedIn: boolean;
+  name: string;
+}

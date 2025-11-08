@@ -1,12 +1,25 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Button } from '../components/Button';
 import type { Page } from '../App';
 
 interface LoginPageProps {
     onNavigate: (page: Page) => void;
+    onLogin: (name: string) => void;
 }
 
-export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
+export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
+  const [email, setEmail] = useState('');
+  
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, you'd validate credentials. Here, we'll extract a name from the email.
+    const name = email.split('@')[0] || 'User';
+    // Capitalize first letter
+    const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
+    onLogin(formattedName);
+  };
+    
   return (
     <div className="bg-[#FFF9F5] flex-grow flex items-center justify-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center max-w-md">
@@ -15,17 +28,24 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
                 Log in to manage your bookings and connect with photographers.
             </p>
         
-            <div className="mt-8 bg-white p-8 rounded-2xl border border-gray-200/80 text-left shadow-lg">
+            <form onSubmit={handleLogin} className="mt-8 bg-white p-8 rounded-2xl border border-gray-200/80 text-left shadow-lg">
                 <div className="space-y-6">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-[#2C3E50]">Email Address</label>
-                        <input type="email" id="email" className="mt-1 w-full px-4 py-3 rounded-lg border-gray-300 bg-white focus:ring-[#FF7D6B] focus:border-[#FF7D6B]" />
+                        <input 
+                          type="email" 
+                          id="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          className="mt-1 w-full px-4 py-3 rounded-lg border-gray-300 bg-white focus:ring-[#FF7D6B] focus:border-[#FF7D6B]" 
+                        />
                     </div>
                      <div>
                         <label htmlFor="password-login" className="block text-sm font-medium text-[#2C3E50]">Password</label>
-                        <input type="password" id="password-login" className="mt-1 w-full px-4 py-3 rounded-lg border-gray-300 bg-white focus:ring-[#FF7D6B] focus:border-[#FF7D6B]" />
+                        <input type="password" id="password-login" required className="mt-1 w-full px-4 py-3 rounded-lg border-gray-300 bg-white focus:ring-[#FF7D6B] focus:border-[#FF7D6B]" />
                     </div>
-                    <Button className="w-full text-lg !py-3 font-bold">
+                    <Button type="submit" className="w-full text-lg !py-3 font-bold">
                         Log In
                     </Button>
                 </div>
@@ -35,7 +55,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
                         Sign up
                     </span>
                 </p>
-            </div>
+            </form>
         </div>
     </div>
   );
