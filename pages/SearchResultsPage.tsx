@@ -1,9 +1,11 @@
-
 import React, { useState, useMemo } from 'react';
 import type { Photographer } from '../types';
 import { PhotographerCard } from '../components/PhotographerCard';
 import { FilterSidebar } from '../components/FilterSidebar';
 import { AiSearch } from '../components/AiSearch';
+import { useSeo } from '../hooks/useSeo';
+import { StructuredData } from '../components/StructuredData';
+
 
 interface SearchResultsPageProps {
   photographers: Photographer[];
@@ -12,6 +14,11 @@ interface SearchResultsPageProps {
 
 export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photographers, onViewProfile }) => {
   const [aiFilteredIds, setAiFilteredIds] = useState<string[] | null>(null);
+
+  useSeo({
+    title: 'Find Photographers in the Netherlands | InFramenI',
+    description: 'Browse and filter professional photographers across the Netherlands. Compare portfolios, prices, and reviews to find the perfect match for your needs on InFramenI.'
+  });
 
   const handleAiResults = (ids: string[]) => {
     setAiFilteredIds(ids);
@@ -29,8 +36,26 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
     return photographers.filter(p => idSet.has(p.id));
   }, [photographers, aiFilteredIds]);
 
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Photographers in the Netherlands",
+    "itemListElement": filteredPhotographers.map((p, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "ProfessionalService",
+        "name": p.name,
+        "image": p.profileImageUrl,
+        "description": p.bio.substring(0, 120) + '...',
+        "url": `/profile/${p.id}` // A real app would have a URL structure like this
+      }
+    }))
+  };
+
   return (
     <div className="bg-[#FFF9F5]">
+      <StructuredData data={itemListSchema} />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Find a Photographer</h1>

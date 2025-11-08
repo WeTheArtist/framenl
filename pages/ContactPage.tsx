@@ -1,7 +1,13 @@
 import React from 'react';
 import { Button } from '../components/Button';
+import { useSeo } from '../hooks/useSeo';
 
 export const ContactPage: React.FC = () => {
+  useSeo({
+    title: 'Contact Us | InFramenI',
+    description: "Get in touch with the InFramenI team. We're here to help with any questions, feedback, or support requests you may have."
+  });
+
   return (
     <div className="bg-[#FFF9F5] flex-grow flex items-center justify-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center max-w-2xl">

@@ -1,8 +1,35 @@
 import React from 'react';
+import { useSeo } from '../hooks/useSeo';
+import { StructuredData } from '../components/StructuredData';
 
 export const AboutUsPage: React.FC = () => {
+    useSeo({
+        title: 'About Us | InFramenI',
+        description: "Learn about InFramenI's mission to connect clients with talented photographers across the Netherlands and empower creative careers."
+    });
+
+    const organizationSchema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "InFramenI",
+        "url": "https://inframeni-app.com",
+        "logo": "https://inframeni-app.com/logo.png",
+        "description": "InFramenI is a marketplace connecting clients with professional photographers in the Netherlands.",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Amsterdam",
+            "addressCountry": "NL"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "email": "support@inframeni.com"
+        }
+    };
+
   return (
     <div className="bg-white">
+      <StructuredData data={organizationSchema} />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="max-w-4xl mx-auto">
             <header className="text-center mb-12">

@@ -28,7 +28,7 @@ export const PhotographerCard: React.FC<PhotographerCardProps> = ({ photographer
         <img
           className="w-full h-56 object-cover rounded-t-2xl"
           src={photographer.profileImageUrl}
-          alt={photographer.name}
+          alt={`Profile photo of ${photographer.name}, a ${photographer.specialties.join(' and ')} photographer.`}
           loading="lazy"
         />
         {photographer.isVerified && (

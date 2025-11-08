@@ -1,9 +1,10 @@
-
 import React, { useState, useMemo } from 'react';
 import type { Photographer, MoodBoardItem, BookingPackage } from '../types';
 import { Button } from '../components/Button';
 import { StarIcon, VerifiedIcon, MapPinIcon, ArrowLeftIcon, BookmarkIcon } from '../components/IconComponents';
 import { Calendar } from '../components/Calendar';
+import { useSeo } from '../hooks/useSeo';
+import { StructuredData } from '../components/StructuredData';
 
 interface ProfilePageProps {
   photographer: Photographer;
@@ -19,7 +20,7 @@ const ProfileHeader: React.FC<{ photographer: Photographer }> = ({ photographer 
     <div className="relative h-64 md:h-96 w-full">
         <img 
             src={photographer.portfolioImages[0]}
-            alt={`${photographer.name}'s work`}
+            alt={`A sample of ${photographer.name}'s ${photographer.specialties[0]} photography.`}
             className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -52,7 +53,7 @@ const PortfolioSection: React.FC<{
             const isInMoodBoard = moodBoard.some(item => item.imageUrl === img);
             return (
               <div key={index} className="overflow-hidden rounded-lg group relative">
-                  <img src={img} alt={`Portfolio image ${index + 1}`} className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300"/>
+                  <img src={img} alt={`${photographer.name}'s portfolio image ${index + 1}`} className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300"/>
                    <button 
                     onClick={() => onAddToMoodBoard({ 
                       photographerId: photographer.id, 
@@ -137,6 +138,11 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, 
   const [selectedPackageId, setSelectedPackageId] = useState<string>(photographer.packages[0].id);
   const [notes, setNotes] = useState('');
 
+  useSeo({
+    title: `${photographer.name} - ${photographer.specialties.join(' & ')} Photographer in ${photographer.location} | InFramenI`,
+    description: `Book ${photographer.name}, a professional photographer in ${photographer.location} specializing in ${photographer.specialties.join(', ')}. View portfolio, packages, and reviews. ${photographer.bio.substring(0, 80)}...`
+  });
+
   const selectedPackage = useMemo(() => {
     return photographer.packages.find(p => p.id === selectedPackageId) || photographer.packages[0];
   }, [selectedPackageId, photographer.packages]);
@@ -144,6 +150,42 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, 
   const isDateBooked = useMemo(() => {
     return photographer.bookedDates.includes(selectedDate);
   }, [selectedDate, photographer.bookedDates]);
+
+  const photographerSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": photographer.name,
+    "image": photographer.profileImageUrl,
+    "description": photographer.bio,
+    "telephone": "+31-XXX-XXX-XXX", // Placeholder phone
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": photographer.location.split(',')[0],
+      "addressCountry": "NL"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": photographer.rating,
+      "reviewCount": photographer.reviewCount
+    },
+    "review": photographer.reviews.map(review => ({
+      "@type": "Review",
+      "author": { "@type": "Person", "name": review.clientName },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": review.rating
+      },
+      "reviewBody": review.comment,
+      "datePublished": review.date
+    })),
+    "offers": photographer.packages.map(pkg => ({
+      "@type": "Offer",
+      "name": pkg.name,
+      "description": pkg.description,
+      "price": pkg.price,
+      "priceCurrency": "EUR"
+    }))
+  };
 
   const TabButton: React.FC<{tab: ProfileTab; label: string}> = ({tab, label}) => (
     <button
@@ -160,6 +202,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, 
 
   return (
     <div className="bg-white">
+      <StructuredData data={photographerSchema} />
       <ProfileHeader photographer={photographer} />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">

@@ -83,3 +83,8 @@ export interface Conversation {
   lastMessageTimestamp: string;
   messages: Message[];
 }
+
+export interface SeoData {
+    title: string;
+    description: string;
+}

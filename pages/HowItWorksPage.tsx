@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSeo } from '../hooks/useSeo';
+import { StructuredData } from '../components/StructuredData';
 
 const Step: React.FC<{ number: string, title: string, children: React.ReactNode}> = ({number, title, children}) => (
     <div className="bg-white p-8 rounded-2xl border border-gray-200/80 shadow-lg">
@@ -9,8 +11,33 @@ const Step: React.FC<{ number: string, title: string, children: React.ReactNode}
 );
 
 export const HowItWorksPage: React.FC = () => {
+  useSeo({
+    title: 'How It Works | InFramenI',
+    description: 'Learn how to easily find, book, and connect with professional photographers on InFramenI in just three simple steps.'
+  });
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Book a Photographer on InFramenI",
+    "step": [{
+      "@type": "HowToStep",
+      "name": "Search & Discover",
+      "text": "Use our powerful search and filters to browse profiles of talented photographers. Compare portfolios, specialties, and pricing instantly."
+    },{
+      "@type": "HowToStep",
+      "name": "Request to Book",
+      "text": "Found the one? Select a date and package, and send a booking request directly to the photographer. You'll get a confirmation quickly."
+    },{
+      "@type": "HowToStep",
+      "name": "Capture the Moment",
+      "text": "Coordinate with your photographer, have an amazing photoshoot, and receive your beautiful photos. It's that simple!"
+    }]
+  };
+
   return (
     <div className="bg-[#FFF9F5]">
+      <StructuredData data={howToSchema} />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <header className="text-center mb-12">
             <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">How It Works</h1>

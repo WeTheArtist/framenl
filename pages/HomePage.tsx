@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Photographer } from '../types';
 import { CATEGORIES, TESTIMONIALS } from '../constants';
@@ -6,6 +5,8 @@ import { PhotographerCard } from '../components/PhotographerCard';
 import { Button } from '../components/Button';
 import { StarIcon } from '../components/IconComponents';
 import { AiRecommendation } from '../components/AiRecommendation';
+import { useSeo } from '../hooks/useSeo';
+import { StructuredData } from '../components/StructuredData';
 
 interface HomePageProps {
   photographers: Photographer[];
@@ -63,7 +64,7 @@ const Categories: React.FC<{ onNavigate: () => void }> = ({ onNavigate }) => (
        <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
         {CATEGORIES.map(category => (
           <div key={category.name} onClick={onNavigate} className="relative group rounded-xl overflow-hidden cursor-pointer shadow-sm">
-            <img src={category.imageUrl} alt={category.name} className="w-full h-48 object-cover transform transition-transform duration-300 group-hover:scale-110" />
+            <img src={category.imageUrl} alt={`Browse for ${category.name} photographers`} className="w-full h-48 object-cover transform transition-transform duration-300 group-hover:scale-110" />
             <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center p-2">
               <h3 className="text-white text-lg font-semibold text-center">{category.name}</h3>
             </div>
@@ -97,8 +98,39 @@ const Testimonials: React.FC = () => (
 );
 
 export const HomePage: React.FC<HomePageProps> = ({ photographers, onSearch, onViewProfile }) => {
+  useSeo({
+    title: 'InFramenI | Find Professional Photographers in the Netherlands',
+    description: 'Discover and book top-rated photographers in the Netherlands for weddings, portraits, events, and more. Get instant quotes and view portfolios on InFramenI.',
+  });
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "InFramenI",
+    "url": "https://inframeni-app.com", // Replace with actual URL
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://inframeni-app.com/search?q={search_term_string}", // Replace with actual URL
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "InFramenI",
+    "url": "https://inframeni-app.com", // Replace with actual URL
+    "logo": "https://inframeni-app.com/logo.png", // Replace with actual URL
+    "sameAs": [
+      // "https://www.facebook.com/InFramenI", // Add social links
+      // "https://www.instagram.com/InFramenI"
+    ]
+  };
+
   return (
     <>
+      <StructuredData data={websiteSchema} />
+      <StructuredData data={organizationSchema} />
       <Hero onSearch={onSearch} />
       <FeaturedPhotographers photographers={photographers} onViewProfile={onViewProfile} />
       <Categories onNavigate={onSearch} />
