@@ -7,8 +7,9 @@ import { ProfilePage } from './pages/ProfilePage';
 import { PhotographerDashboardPage } from './pages/PhotographerDashboardPage';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import type { Photographer, MoodBoardItem, User, BookingPackage } from './types';
+import type { Photographer, MoodBoardItem, User, BookingPackage, Booking } from './types';
 import { PHOTOGRAPHERS } from './constants';
+import * as userService from './services/userService';
 import { LoginPage } from './pages/LoginPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
@@ -19,6 +20,7 @@ import { AboutUsPage } from './pages/AboutUsPage';
 import { ContactPage } from './pages/ContactPage';
 import { CareersPage } from './pages/CareersPage';
 import { MoodBoardPage } from './pages/MoodBoardPage';
+import { UserDashboardPage } from './pages/UserDashboardPage';
 import { BookingModal } from './components/BookingModal';
 
 
@@ -27,6 +29,7 @@ export type Page =
   | 'search' 
   | 'profile' 
   | 'photographerDashboard'
+  | 'userDashboard'
   | 'login'
   | 'signup'
   | 'howItWorks'
@@ -49,8 +52,7 @@ const App: React.FC = () => {
   const [selectedPhotographer, setSelectedPhotographer] = useState<Photographer | null>(null);
   
   const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem('inFramenIUser');
-    return savedUser ? JSON.parse(savedUser) : null;
+    return userService.getLoggedInUser();
   });
 
   const [moodBoard, setMoodBoard] = useState<MoodBoardItem[]>(() => {
@@ -61,13 +63,6 @@ const App: React.FC = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>(PHOTOGRAPHERS);
   const [bookingState, setBookingState] = useState<BookingState>({ isOpen: false, photographer: null, details: null });
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('inFramenIUser', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('inFramenIUser');
-    }
-  }, [user]);
 
   useEffect(() => {
     localStorage.setItem('inFramenIMoodBoard', JSON.stringify(moodBoard));
@@ -75,7 +70,7 @@ const App: React.FC = () => {
 
 
   const navigateTo = (page: Page) => {
-    const protectedPages: Page[] = ['moodBoard', 'photographerDashboard'];
+    const protectedPages: Page[] = ['moodBoard', 'photographerDashboard', 'userDashboard'];
     if (!user && protectedPages.includes(page)) {
         setCurrentPage('login');
     } else {
@@ -84,13 +79,15 @@ const App: React.FC = () => {
     window.scrollTo(0, 0);
   };
   
-  const handleLogin = (name: string) => {
-    setUser({ isLoggedIn: true, name });
+  const handleLogin = (loggedInUser: User) => {
+    setUser(loggedInUser);
+    userService.setLoggedInUser(loggedInUser.email);
     navigateTo('home');
   };
 
   const handleLogout = () => {
     setUser(null);
+    userService.logoutUser();
     navigateTo('home');
   };
 
@@ -122,8 +119,26 @@ const App: React.FC = () => {
   };
   
   const handleBookingSuccess = () => {
-    if (!bookingState.photographer || !bookingState.details) return;
+    if (!bookingState.photographer || !bookingState.details || !user) return;
+    
+    // 1. Create the new booking object
+    const newBooking: Booking = {
+        id: Date.now().toString(),
+        photographerId: bookingState.photographer.id,
+        photographerName: bookingState.photographer.name,
+        photographerProfileImage: bookingState.photographer.profileImageUrl,
+        date: bookingState.details.date,
+        package: bookingState.details.pkg,
+        status: new Date(bookingState.details.date) > new Date() ? 'upcoming' : 'completed',
+    };
+    
+    // 2. Update the user with the new booking
+    const updatedUser = userService.addBookingToUser(user.email, newBooking);
+    if (updatedUser) {
+        setUser(updatedUser); // Update user in state
+    }
 
+    // 3. Update the photographer's booked dates
     setPhotographers(currentPhotographers => 
         currentPhotographers.map(p => 
             p.id === bookingState.photographer!.id
@@ -131,7 +146,6 @@ const App: React.FC = () => {
                 : p
         )
     );
-    // The modal will close itself upon success.
   };
 
   const renderPage = () => {
@@ -157,6 +171,11 @@ const App: React.FC = () => {
         }
       case 'photographerDashboard':
         return <PhotographerDashboardPage photographer={photographers[0]}/>;
+      case 'userDashboard':
+        return user ? <UserDashboardPage user={user} onViewProfile={(id) => {
+          const photographer = photographers.find(p => p.id === id);
+          if (photographer) viewProfile(photographer);
+        }} /> : null;
       case 'login':
         return <LoginPage onLogin={handleLogin} onNavigate={navigateTo} />;
       case 'signup':

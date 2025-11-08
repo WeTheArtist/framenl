@@ -50,6 +50,19 @@ export interface MoodBoardItem {
 }
 
 export interface User {
-  isLoggedIn: boolean;
+  id: string;
   name: string;
+  email: string;
+  password?: string; // Not always present, e.g., for OAuth
+  bookings: Booking[];
+}
+
+export interface Booking {
+    id: string;
+    photographerId: string;
+    photographerName: string;
+    photographerProfileImage: string;
+    date: string;
+    package: BookingPackage;
+    status: 'upcoming' | 'completed';
 }
