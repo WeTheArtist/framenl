@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://inframenl.vercel.app/sitemap.xml
+
+
+
+
+
+
+Add robots.txt for SEO
