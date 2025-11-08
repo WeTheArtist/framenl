@@ -1,8 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from './Button';
 import type { Page } from '../App';
 import type { User } from '../types';
+import { ChevronDownIcon } from './IconComponents';
 
 interface HeaderProps {
   onNavigate: (page: Page) => void;
@@ -13,6 +14,30 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user, onLogout }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const handleDropdownNavigate = (page: Page) => {
+        onNavigate(page);
+        setIsDropdownOpen(false);
+    };
+
+    const handleDropdownLogout = () => {
+        onLogout();
+        setIsDropdownOpen(false);
+    }
 
   return (
     <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
@@ -36,15 +61,44 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user
                     )}
                 </a>
             )}
-             {user && <a onClick={() => onNavigate('userDashboard')} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer transition-colors">My Bookings</a>}
             <a onClick={() => onNavigate('photographerDashboard')} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer transition-colors">For Photographers</a>
           </nav>
           <div className="hidden md:flex items-center space-x-2">
             {user ? (
-                <>
-                    <span className="text-sm text-[#5A6A78]">Welcome, {user.name}!</span>
-                    <Button variant="ghost" onClick={onLogout}>Log Out</Button>
-                </>
+                 <div className="relative" ref={dropdownRef}>
+                    <button 
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)} 
+                        className="flex items-center space-x-1 text-sm font-medium text-[#5A6A78] hover:text-[#FF7D6B] p-2 rounded-md transition-colors"
+                        aria-haspopup="true"
+                        aria-expanded={isDropdownOpen}
+                    >
+                        <span>{user.name}</span>
+                        <ChevronDownIcon className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200/80">
+                            <a 
+                                onClick={() => handleDropdownNavigate('userDashboard')} 
+                                className="block px-4 py-2 text-sm text-[#5A6A78] hover:bg-orange-50/50 hover:text-[#E86A5A] cursor-pointer"
+                            >
+                                My Bookings
+                            </a>
+                             <a 
+                                onClick={() => handleDropdownNavigate('messages')} 
+                                className="block px-4 py-2 text-sm text-[#5A6A78] hover:bg-orange-50/50 hover:text-[#E86A5A] cursor-pointer"
+                            >
+                                Messages
+                            </a>
+                            <div className="border-t my-1 border-gray-200/80"></div>
+                            <a 
+                                onClick={handleDropdownLogout} 
+                                className="block w-full text-left px-4 py-2 text-sm text-[#5A6A78] hover:bg-orange-50/50 hover:text-[#E86A5A] cursor-pointer"
+                            >
+                                Logout
+                            </a>
+                        </div>
+                    )}
+                </div>
             ) : (
                 <>
                     <Button variant="ghost" onClick={() => onNavigate('login')}>Log In</Button>
@@ -66,6 +120,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user
             <a onClick={() => { onNavigate('search'); setIsMenuOpen(false); }} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer">Find a Photographer</a>
              {user && <a onClick={() => { onNavigate('moodBoard'); setIsMenuOpen(false); }} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer">Mood Board</a>}
             {user && <a onClick={() => { onNavigate('userDashboard'); setIsMenuOpen(false); }} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer">My Bookings</a>}
+            {user && <a onClick={() => { onNavigate('messages'); setIsMenuOpen(false); }} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer">Messages</a>}
             <a onClick={() => { onNavigate('photographerDashboard'); setIsMenuOpen(false); }} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer">For Photographers</a>
             <hr/>
             <div className="flex flex-col space-y-2">

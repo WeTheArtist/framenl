@@ -66,3 +66,20 @@ export interface Booking {
     package: BookingPackage;
     status: 'upcoming' | 'completed';
 }
+
+export interface Message {
+  id: string;
+  senderId: 'user' | string; // 'user' or photographerId
+  text: string;
+  timestamp: string;
+}
+
+export interface Conversation {
+  id: string;
+  photographerId: string;
+  photographerName: string;
+  photographerProfileImage: string;
+  lastMessage: string;
+  lastMessageTimestamp: string;
+  messages: Message[];
+}

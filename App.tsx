@@ -22,6 +22,7 @@ import { CareersPage } from './pages/CareersPage';
 import { MoodBoardPage } from './pages/MoodBoardPage';
 import { UserDashboardPage } from './pages/UserDashboardPage';
 import { BookingModal } from './components/BookingModal';
+import { MessagesPage } from './pages/MessagesPage';
 
 
 export type Page = 
@@ -39,7 +40,8 @@ export type Page =
   | 'about'
   | 'contact'
   | 'careers'
-  | 'moodBoard';
+  | 'moodBoard'
+  | 'messages';
   
 interface BookingState {
   isOpen: boolean;
@@ -70,7 +72,7 @@ const App: React.FC = () => {
 
 
   const navigateTo = (page: Page) => {
-    const protectedPages: Page[] = ['moodBoard', 'photographerDashboard', 'userDashboard'];
+    const protectedPages: Page[] = ['moodBoard', 'photographerDashboard', 'userDashboard', 'messages'];
     if (!user && protectedPages.includes(page)) {
         setCurrentPage('login');
     } else {
@@ -199,6 +201,11 @@ const App: React.FC = () => {
             const photographer = photographers.find(p => p.id === id);
             if(photographer) viewProfile(photographer);
         }} />;
+      case 'messages':
+        return user ? <MessagesPage user={user} onViewProfile={(id) => {
+            const photographer = photographers.find(p => p.id === id);
+            if (photographer) viewProfile(photographer);
+        }} /> : null;
       default:
         return <HomePage photographers={photographers} onSearch={() => navigateTo('search')} onViewProfile={viewProfile} />;
     }
