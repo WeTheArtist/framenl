@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import type { Photographer, BookingPackage } from '../types';
 import { Button } from './Button';
@@ -15,10 +14,31 @@ interface BookingModalProps {
 }
 
 type BookingStep = 'details' | 'payment' | 'success';
+type PaymentMethod = 'card' | 'ideal' | 'paypal';
+
+const PaymentMethodButton: React.FC<{
+  method: PaymentMethod;
+  current: PaymentMethod;
+  onClick: () => void;
+  children: React.ReactNode;
+}> = ({ method, current, onClick, children }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full flex items-center justify-center p-2 rounded-md transition-all text-sm font-medium h-12 ${
+        current === method
+          ? 'bg-[#FF7D6B] text-white shadow-sm'
+          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+      }`}
+    >
+      {children}
+    </button>
+);
 
 export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookingDetails, onClose, onBookingSuccess }) => {
   const [step, setStep] = useState<BookingStep>('details');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
 
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,21 +99,55 @@ export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookin
           <form onSubmit={handlePayment}>
             <h3 className="text-2xl font-bold text-center text-[#2C3E50]">Secure Payment</h3>
             <p className="text-center text-sm mt-1 text-[#5A6A78]">Total: €{bookingDetails.pkg.price}</p>
-            <div className="mt-6 space-y-4 text-left">
-              <div>
-                <label htmlFor="card-number" className="block text-sm font-medium text-[#2C3E50]">Card Number</label>
-                <input type="text" id="card-number" placeholder="•••• •••• •••• ••••" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                 <div>
-                    <label htmlFor="expiry" className="block text-sm font-medium text-[#2C3E50]">Expiry Date</label>
-                    <input type="text" id="expiry" placeholder="MM / YY" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
+            
+            <div className="mt-6 grid grid-cols-3 gap-2 border border-gray-200 rounded-lg p-1 bg-gray-50">
+              <PaymentMethodButton method="card" current={paymentMethod} onClick={() => setPaymentMethod('card')}>
+                  Card
+              </PaymentMethodButton>
+              <PaymentMethodButton method="ideal" current={paymentMethod} onClick={() => setPaymentMethod('ideal')}>
+                  iDEAL
+              </PaymentMethodButton>
+              <PaymentMethodButton method="paypal" current={paymentMethod} onClick={() => setPaymentMethod('paypal')}>
+                  PayPal
+              </PaymentMethodButton>
+            </div>
+
+            <div className="mt-6 space-y-4 text-left min-h-[160px]">
+              {paymentMethod === 'card' && (
+                 <div className="space-y-4">
+                    <div>
+                      <label htmlFor="card-number" className="block text-sm font-medium text-[#2C3E50]">Card Number</label>
+                      <input type="text" id="card-number" placeholder="•••• •••• •••• ••••" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                          <label htmlFor="expiry" className="block text-sm font-medium text-[#2C3E50]">Expiry Date</label>
+                          <input type="text" id="expiry" placeholder="MM / YY" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
+                      </div>
+                      <div>
+                          <label htmlFor="cvc" className="block text-sm font-medium text-[#2C3E50]">CVC</label>
+                          <input type="text" id="cvc" placeholder="•••" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
+                      </div>
+                    </div>
                  </div>
-                 <div>
-                    <label htmlFor="cvc" className="block text-sm font-medium text-[#2C3E50]">CVC</label>
-                    <input type="text" id="cvc" placeholder="•••" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
-                 </div>
-              </div>
+              )}
+              {paymentMethod === 'ideal' && (
+                <div>
+                   <label htmlFor="ideal-bank" className="block text-sm font-medium text-[#2C3E50]">Choose your bank</label>
+                   <select id="ideal-bank" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm">
+                      <option>ABN AMRO</option>
+                      <option>ING</option>
+                      <option>Rabobank</option>
+                      <option>de Volksbank (SNS, ASN, RegioBank)</option>
+                      <option>Triodos Bank</option>
+                   </select>
+                </div>
+              )}
+              {paymentMethod === 'paypal' && (
+                <div className="text-center pt-8">
+                  <p className="text-[#5A6A78]">You will be redirected to PayPal to complete your payment.</p>
+                </div>
+              )}
             </div>
              <div className="mt-8 flex justify-end">
                 <Button type="submit" className="w-full text-lg !py-3" disabled={isProcessing}>

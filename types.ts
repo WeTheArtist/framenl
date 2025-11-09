@@ -14,6 +14,13 @@ export interface Photographer {
   packages: BookingPackage[];
   reviews: Review[];
   bookedDates: string[]; // YYYY-MM-DD format
+  website?: string;
+  instagram?: string;
+  facebook?: string;
+  tiktok?: string;
+  youtube?: string;
+  twitter?: string;
+  otherSocial?: string;
 }
 
 export interface BookingPackage {
@@ -25,7 +32,7 @@ export interface BookingPackage {
 }
 
 export interface Review {
-  id: string;
+  id:string;
   clientName: string;
   rating: number;
   comment: string;

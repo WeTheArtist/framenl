@@ -1,4 +1,3 @@
-
 import type { User, Booking } from '../types';
 
 const USERS_KEY = 'inFramenIUsers';
@@ -49,14 +48,13 @@ export const authenticateUser = (email: string, password?: string): User | null 
 };
 
 
-export const handleGoogleSignIn = (): User => {
-    const googleEmail = 'google.user@example.com';
-    let user = findUserByEmail(googleEmail);
+export const handleGoogleSignIn = (account: { name: string, email: string }): User => {
+    let user = findUserByEmail(account.email);
 
     if (!user) {
         user = registerUser({
-            name: 'Google User',
-            email: googleEmail
+            name: account.name,
+            email: account.email
         });
     }
     

@@ -149,6 +149,16 @@ const App: React.FC = () => {
         )
     );
   };
+  
+  const handleUpdatePhotographer = (updatedPhotographer: Photographer) => {
+    setPhotographers(currentPhotographers =>
+      currentPhotographers.map(p =>
+        p.id === updatedPhotographer.id ? updatedPhotographer : p
+      )
+    );
+    // After saving, navigate them to see the changes
+    navigateTo('search');
+  };
 
   const renderPage = () => {
     switch (currentPage) {
@@ -171,8 +181,11 @@ const App: React.FC = () => {
             navigateTo('search');
             return null;
         }
-      case 'photographerDashboard':
-        return <PhotographerDashboardPage photographer={photographers[0]}/>;
+      case 'photographerDashboard': {
+        // The demo dashboard always edits the first photographer
+        const photographerToEdit = photographers.find(p => p.id === '1') || photographers[0]; 
+        return <PhotographerDashboardPage photographer={photographerToEdit} onSave={handleUpdatePhotographer} />;
+      }
       case 'userDashboard':
         return user ? <UserDashboardPage user={user} onViewProfile={(id) => {
           const photographer = photographers.find(p => p.id === id);
