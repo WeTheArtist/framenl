@@ -23,6 +23,7 @@ import { MoodBoardPage } from './pages/MoodBoardPage';
 import { UserDashboardPage } from './pages/UserDashboardPage';
 import { BookingModal } from './components/BookingModal';
 import { MessagesPage } from './pages/MessagesPage';
+import { WaitlistBanner } from './components/WaitlistBanner';
 
 
 export type Page = 
@@ -64,6 +65,7 @@ const App: React.FC = () => {
 
   const [photographers, setPhotographers] = useState<Photographer[]>(PHOTOGRAPHERS);
   const [bookingState, setBookingState] = useState<BookingState>({ isOpen: false, photographer: null, details: null });
+  const [isBannerVisible, setIsBannerVisible] = useState(true);
 
 
   useEffect(() => {
@@ -227,6 +229,7 @@ const App: React.FC = () => {
   return (
     <div className="bg-[#FFF9F5] min-h-screen flex flex-col text-[#2C3E50]">
       <Header onNavigate={navigateTo} moodBoardCount={moodBoard.length} user={user} onLogout={handleLogout} />
+      {isBannerVisible && <WaitlistBanner onClose={() => setIsBannerVisible(false)} />}
       <main className="flex-grow">
         {renderPage()}
       </main>
