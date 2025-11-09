@@ -53,6 +53,7 @@ interface BookingState {
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [selectedPhotographer, setSelectedPhotographer] = useState<Photographer | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   
   const [user, setUser] = useState<User | null>(() => {
     return userService.getLoggedInUser();
@@ -73,8 +74,11 @@ const App: React.FC = () => {
   }, [moodBoard]);
 
 
-  const navigateTo = (page: Page) => {
+  const navigateTo = (page: Page, query?: string) => {
     const protectedPages: Page[] = ['moodBoard', 'photographerDashboard', 'userDashboard', 'messages'];
+    if (page === 'search' && typeof query === 'string') {
+        setSearchQuery(query);
+    }
     if (!user && protectedPages.includes(page)) {
         setCurrentPage('login');
     } else {
@@ -165,9 +169,9 @@ const App: React.FC = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage photographers={photographers} onSearch={() => navigateTo('search')} onViewProfile={viewProfile} />;
+        return <HomePage photographers={photographers} onSearch={(query) => navigateTo('search', query)} onViewProfile={viewProfile} />;
       case 'search':
-        return <SearchResultsPage photographers={photographers} onViewProfile={viewProfile} />;
+        return <SearchResultsPage photographers={photographers} onViewProfile={viewProfile} initialQuery={searchQuery} />;
       case 'profile':
         {
             const currentPhotographerData = photographers.find(p => p.id === selectedPhotographer?.id) || selectedPhotographer;
@@ -222,7 +226,7 @@ const App: React.FC = () => {
             if (photographer) viewProfile(photographer);
         }} /> : null;
       default:
-        return <HomePage photographers={photographers} onSearch={() => navigateTo('search')} onViewProfile={viewProfile} />;
+        return <HomePage photographers={photographers} onSearch={(query) => navigateTo('search', query)} onViewProfile={viewProfile} />;
     }
   };
 

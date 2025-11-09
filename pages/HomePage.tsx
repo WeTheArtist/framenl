@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import type { Photographer } from '../types';
 import { CATEGORIES, TESTIMONIALS } from '../constants';
 import { PhotographerCard } from '../components/PhotographerCard';
@@ -10,36 +11,53 @@ import { StructuredData } from '../components/StructuredData';
 
 interface HomePageProps {
   photographers: Photographer[];
-  onSearch: () => void;
+  onSearch: (query: string) => void;
   onViewProfile: (photographer: Photographer) => void;
 }
 
-const Hero: React.FC<{ onSearch: () => void }> = ({ onSearch }) => (
-  <div className="relative bg-slate-900 text-white min-h-[60vh] md:min-h-[70vh] flex items-center">
-    <div
-      className="absolute inset-0 bg-cover bg-center opacity-40"
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519643381401-22c77e60520e?q=80&w=2073&auto=format&fit=crop')" }}
-    ></div>
-    <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-      <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight">
-        Find Your Perfect Photographer
-      </h1>
-      <p className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-gray-200">
-        Discover and book talented local photographers in the Netherlands for any occasion.
-      </p>
-      <div className="mt-10 max-w-xl mx-auto">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <input
-            type="text"
-            placeholder="e.g. Wedding photographer in Amsterdam"
-            className="w-full px-5 py-4 rounded-full text-gray-900 bg-white focus:ring-2 focus:ring-[#FF7D6B] border-0"
-          />
-          <Button onClick={onSearch} className="sm:w-auto px-8 !py-4 text-lg">Search</Button>
+const Hero: React.FC<{ onSearch: (query: string) => void }> = ({ onSearch }) => {
+    const [query, setQuery] = useState('');
+    
+    const handleSearch = () => {
+        onSearch(query);
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    return (
+      <div className="relative bg-slate-900 text-white min-h-[60vh] md:min-h-[70vh] flex items-center">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-40"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519643381401-22c77e60520e?q=80&w=2073&auto=format&fit=crop')" }}
+        ></div>
+        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight">
+            Find Your Perfect Photographer
+          </h1>
+          <p className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-gray-200">
+            Discover and book talented local photographers in the Netherlands for any occasion.
+          </p>
+          <div className="mt-10 max-w-xl mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="e.g. Wedding photographer in Amsterdam"
+                className="w-full px-5 py-4 rounded-full text-gray-900 bg-white focus:ring-2 focus:ring-[#FF7D6B] border-0"
+              />
+              <Button onClick={handleSearch} className="sm:w-auto px-8 !py-4 text-lg">Search</Button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-);
+    );
+};
 
 const FeaturedPhotographers: React.FC<{ photographers: Photographer[], onViewProfile: (photographer: Photographer) => void }> = ({ photographers, onViewProfile }) => (
   <div className="py-16 sm:py-24 bg-white">
@@ -133,7 +151,7 @@ export const HomePage: React.FC<HomePageProps> = ({ photographers, onSearch, onV
       <StructuredData data={organizationSchema} />
       <Hero onSearch={onSearch} />
       <FeaturedPhotographers photographers={photographers} onViewProfile={onViewProfile} />
-      <Categories onNavigate={onSearch} />
+      <Categories onNavigate={() => onSearch('')} />
        <div className="py-16 sm:py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
             <AiRecommendation photographer={photographers[0]} />
