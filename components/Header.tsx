@@ -40,13 +40,23 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user
     }
 
   return (
-    <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+    <header className="relative bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+            <span className="text-8xl font-black text-gray-200/50 opacity-50 transform -rotate-12 select-none">
+                DEMO
+            </span>
+        </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-24">
           <div className="flex-shrink-0 cursor-pointer" onClick={() => onNavigate('home')}>
-            <h1 className="text-2xl font-bold text-[#2C3E50] tracking-tight">
-              In<span className="text-[#FF7D6B]">Frame</span>nI
-            </h1>
+            <div className="flex items-center gap-2" title="framenl Home">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-[#2C3E50]">
+                    <title>framenl Logo</title>
+                    <rect x="10" y="10" width="80" height="80" rx="15" ry="15" stroke="currentColor" strokeWidth="12" fill="none" />
+                    <circle cx="50" cy="50" r="12" fill="#FF7D6B" />
+                </svg>
+                <span className="font-brand text-4xl font-bold text-[#2C3E50] pt-2">framenl</span>
+            </div>
           </div>
           <nav className="hidden md:flex items-center space-x-8">
             <a onClick={() => onNavigate('home')} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer transition-colors">Home</a>
@@ -114,7 +124,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user
         </div>
       </div>
        {isMenuOpen && (
-        <div className="md:hidden absolute top-20 left-0 w-full bg-white shadow-lg p-4">
+        <div className="md:hidden absolute top-24 left-0 w-full bg-white shadow-lg p-4">
           <nav className="flex flex-col space-y-4">
              <a onClick={() => { onNavigate('home'); setIsMenuOpen(false); }} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer">Home</a>
             <a onClick={() => { onNavigate('search'); setIsMenuOpen(false); }} className="font-medium text-[#5A6A78] hover:text-[#FF7D6B] cursor-pointer">Find a Photographer</a>

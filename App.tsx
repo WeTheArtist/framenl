@@ -60,7 +60,7 @@ const App: React.FC = () => {
   });
 
   const [moodBoard, setMoodBoard] = useState<MoodBoardItem[]>(() => {
-    const saved = localStorage.getItem('inFramenIMoodBoard');
+    const saved = localStorage.getItem('framenlMoodBoard');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -70,7 +70,7 @@ const App: React.FC = () => {
 
 
   useEffect(() => {
-    localStorage.setItem('inFramenIMoodBoard', JSON.stringify(moodBoard));
+    localStorage.setItem('framenlMoodBoard', JSON.stringify(moodBoard));
   }, [moodBoard]);
 
 

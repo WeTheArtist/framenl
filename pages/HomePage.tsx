@@ -117,18 +117,18 @@ const Testimonials: React.FC = () => (
 
 export const HomePage: React.FC<HomePageProps> = ({ photographers, onSearch, onViewProfile }) => {
   useSeo({
-    title: 'InFramenI | Find Professional Photographers in the Netherlands',
-    description: 'Discover and book top-rated photographers in the Netherlands for weddings, portraits, events, and more. Get instant quotes and view portfolios on InFramenI.',
+    title: 'framenl | Find Professional Photographers in the Netherlands',
+    description: 'Discover and book top-rated photographers in the Netherlands for weddings, portraits, events, and more. Get instant quotes and view portfolios on framenl.',
   });
 
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "InFramenI",
-    "url": "https://inframeni-app.com", // Replace with actual URL
+    "name": "framenl",
+    "url": "https://framenl-app.com", // Replace with actual URL
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://inframeni-app.com/search?q={search_term_string}", // Replace with actual URL
+      "target": "https://framenl-app.com/search?q={search_term_string}", // Replace with actual URL
       "query-input": "required name=search_term_string"
     }
   };
@@ -136,12 +136,12 @@ export const HomePage: React.FC<HomePageProps> = ({ photographers, onSearch, onV
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "InFramenI",
-    "url": "https://inframeni-app.com", // Replace with actual URL
-    "logo": "https://inframeni-app.com/logo.png", // Replace with actual URL
+    "name": "framenl",
+    "url": "https://framenl-app.com", // Replace with actual URL
+    "logo": "https://framenl-app.com/logo.png", // Replace with actual URL
     "sameAs": [
-      // "https://www.facebook.com/InFramenI", // Add social links
-      // "https://www.instagram.com/InFramenI"
+      // "https://www.facebook.com/framenl", // Add social links
+      // "https://www.instagram.com/framenl"
     ]
   };
 

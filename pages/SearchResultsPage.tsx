@@ -46,8 +46,8 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
   }, [initialQuery]);
 
   useSeo({
-    title: 'Find Photographers in the Netherlands | InFramenI',
-    description: 'Browse and filter professional photographers across the Netherlands. Compare portfolios, prices, and reviews to find the perfect match for your needs on InFramenI.'
+    title: 'Find Photographers in the Netherlands | framenl',
+    description: 'Browse and filter professional photographers across the Netherlands. Compare portfolios, prices, and reviews to find the perfect match for your needs on framenl.'
   });
 
   const handleAiResults = (ids: string[]) => {

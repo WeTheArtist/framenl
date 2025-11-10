@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useSeo } from '../hooks/useSeo';
 import { StructuredData } from '../components/StructuredData';
@@ -12,14 +13,14 @@ const Step: React.FC<{ number: string, title: string, children: React.ReactNode}
 
 export const HowItWorksPage: React.FC = () => {
   useSeo({
-    title: 'How It Works | InFramenI',
-    description: 'Learn how to easily find, book, and connect with professional photographers on InFramenI in just three simple steps.'
+    title: 'How It Works | framenl',
+    description: 'Learn how to easily find, book, and connect with professional photographers on framenl in just three simple steps.'
   });
 
   const howToSchema = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": "How to Book a Photographer on InFramenI",
+    "name": "How to Book a Photographer on framenl",
     "step": [{
       "@type": "HowToStep",
       "name": "Search & Discover",

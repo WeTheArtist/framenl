@@ -161,7 +161,7 @@ export const CATEGORIES: Category[] = [
 
 export const TESTIMONIALS: Testimonial[] = [
   {
-    quote: "Finding the perfect photographer for our wedding was so easy with InFramenI. The quality and professionalism were outstanding. Highly recommended!",
+    quote: "Finding the perfect photographer for our wedding was so easy with framenl. The quality and professionalism were outstanding. Highly recommended!",
     author: "Mila & Noah",
     role: "Newlyweds, Amsterdam"
   },

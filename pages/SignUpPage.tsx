@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '../components/Button';
 import type { Page } from '../App';
@@ -45,7 +46,7 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate, onSignUp }) 
     <>
     <div className="bg-[#FFF9F5] flex-grow flex items-center justify-center py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-md">
-            <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Join InFramenI</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Join framenl</h1>
             <p className="mt-3 text-[#5A6A78]">
                 Sign up to find and book the best photographers in the Netherlands.
             </p>

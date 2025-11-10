@@ -1,7 +1,8 @@
+
 import type { User, Booking } from '../types';
 
-const USERS_KEY = 'inFramenIUsers';
-const LOGGED_IN_USER_KEY = 'inFramenILoggedInUserEmail';
+const USERS_KEY = 'framenlUsers';
+const LOGGED_IN_USER_KEY = 'framenlLoggedInUserEmail';
 
 // --- Database Simulation ---
 

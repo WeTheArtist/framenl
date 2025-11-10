@@ -1,11 +1,12 @@
+
 import React from 'react';
 import { Button } from '../components/Button';
 import { useSeo } from '../hooks/useSeo';
 
 export const ContactPage: React.FC = () => {
   useSeo({
-    title: 'Contact Us | InFramenI',
-    description: "Get in touch with the InFramenI team. We're here to help with any questions, feedback, or support requests you may have."
+    title: 'Contact Us | framenl',
+    description: "Get in touch with the framenl team. We're here to help with any questions, feedback, or support requests you may have."
   });
 
   return (

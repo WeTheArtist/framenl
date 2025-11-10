@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import type { Photographer, MoodBoardItem, BookingPackage } from '../types';
 import { Button } from '../components/Button';
@@ -139,7 +140,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, 
   const [notes, setNotes] = useState('');
 
   useSeo({
-    title: `${photographer.name} - ${photographer.specialties.join(' & ')} Photographer in ${photographer.location} | InFramenI`,
+    title: `${photographer.name} - ${photographer.specialties.join(' & ')} Photographer in ${photographer.location} | framenl`,
     description: `Book ${photographer.name}, a professional photographer in ${photographer.location} specializing in ${photographer.specialties.join(', ')}. View portfolio, packages, and reviews. ${photographer.bio.substring(0, 80)}...`
   });
 

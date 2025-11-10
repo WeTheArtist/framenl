@@ -38,7 +38,7 @@ export const WaitlistBanner: React.FC<WaitlistBannerProps> = ({ onClose }) => {
             <div className="flex-shrink-0">
               <p className="font-bold text-sm text-[#2C3E50]">
                 <span className="bg-[#FF7D6B] text-white text-xs font-bold px-2 py-1 rounded-md mr-2">DEMO</span>
-                Interested in the real InFramenI? Join our waitlist!
+                Interested in the real framenl? Join our waitlist!
               </p>
             </div>
             <div className="flex-grow w-full md:w-auto grid grid-cols-1 sm:grid-cols-3 gap-2">

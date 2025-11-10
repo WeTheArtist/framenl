@@ -57,7 +57,7 @@ export const findPhotographersWithAI = async (query: string, photographers: Phot
             model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
-                systemInstruction: "You are an expert photography consultant for InFramenI, a Dutch photographer marketplace. Your task is to match clients with the perfect photographer based on their needs. Analyze the user's request for style, occasion, and location, and compare it against the provided photographer profiles. Return ONLY a JSON object with a single key 'photographerIds' which is an array of the top 3 matching photographer ID strings. Do not include any other text, explanation, or markdown formatting.",
+                systemInstruction: "You are an expert photography consultant for framenl, a Dutch photographer marketplace. Your task is to match clients with the perfect photographer based on their needs. Analyze the user's request for style, occasion, and location, and compare it against the provided photographer profiles. Return ONLY a JSON object with a single key 'photographerIds' which is an array of the top 3 matching photographer ID strings. Do not include any other text, explanation, or markdown formatting.",
                 responseMimeType: "application/json",
                 responseSchema: {
                     type: Type.OBJECT,

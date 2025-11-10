@@ -1,3 +1,4 @@
+
 import React from 'react';
 import type { Page } from '../App';
 
@@ -17,7 +18,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-bold text-lg mb-4">In<span className="text-[#FF7D6B]">Frame</span>nI</h3>
+            <div className="mb-4 flex items-center gap-2">
+               <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white">
+                   <title>framenl Logo</title>
+                   <rect x="10" y="10" width="80" height="80" rx="15" ry="15" stroke="currentColor" strokeWidth="12" fill="none" />
+                   <circle cx="50" cy="50" r="12" fill="#FF7D6B" />
+               </svg>
+               <span className="font-brand text-4xl font-bold text-white pt-2">framenl</span>
+            </div>
             <p className="text-sm text-gray-300">Connecting talent with moments.</p>
           </div>
           <div>
@@ -46,7 +54,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
         </div>
         <div className="mt-12 border-t border-slate-700 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} InFramenI. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} framenl. All rights reserved.</p>
         </div>
       </div>
     </footer>
