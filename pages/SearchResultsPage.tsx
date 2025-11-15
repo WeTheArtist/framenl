@@ -3,7 +3,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import type { Photographer } from '../types';
 import { PhotographerCard } from '../components/PhotographerCard';
 import { FilterSidebar } from '../components/FilterSidebar';
-import { AiSearch } from '../components/AiSearch';
 import { useSeo } from '../hooks/useSeo';
 import { StructuredData } from '../components/StructuredData';
 
@@ -33,7 +32,6 @@ const SearchBar: React.FC<{ query: string, onQueryChange: (query: string) => voi
 );
 
 export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photographers, onViewProfile, initialQuery }) => {
-  const [aiFilteredIds, setAiFilteredIds] = useState<string[] | null>(null);
   const [filters, setFilters] = useState<Filters>({
     query: initialQuery,
     specialties: new Set(),
@@ -50,14 +48,6 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
     description: 'Browse and filter professional photographers across the Netherlands. Compare portfolios, prices, and reviews to find the perfect match for your needs on framenl.'
   });
 
-  const handleAiResults = (ids: string[]) => {
-    setAiFilteredIds(ids);
-  };
-  
-  const clearAiFilter = () => {
-    setAiFilteredIds(null);
-  }
-
   const handleFilterChange = (newFilters: Partial<Filters>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
@@ -69,15 +59,9 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
         price: { min: null, max: null },
         rating: null,
     });
-    clearAiFilter();
   };
 
   const filteredPhotographers = useMemo(() => {
-    if (aiFilteredIds !== null) {
-      const idSet = new Set(aiFilteredIds);
-      return photographers.filter(p => idSet.has(p.id));
-    }
-
     return photographers.filter(p => {
         // Text Query Filter
         const query = filters.query.toLowerCase().trim();
@@ -105,7 +89,7 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
 
         return true;
     });
-  }, [photographers, filters, aiFilteredIds]);
+  }, [photographers, filters]);
 
   const itemListSchema = {
     "@context": "https://schema.org",
@@ -131,9 +115,7 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Find a Photographer</h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-[#5A6A78]">
-            {aiFilteredIds !== null
-              ? `Showing ${filteredPhotographers.length} top matches from AI search.`
-              : `Showing ${filteredPhotographers.length} of ${photographers.length} professionals.`}
+            Showing {filteredPhotographers.length} of {photographers.length} professionals.
           </p>
         </div>
 
@@ -143,7 +125,6 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
           </div>
           <div className="flex-1">
             <SearchBar query={filters.query} onQueryChange={(q) => handleFilterChange({ query: q })} />
-            <AiSearch photographers={photographers} onResults={handleAiResults} onClear={clearAiFilter} />
             {filteredPhotographers.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {filteredPhotographers.map(photographer => (
@@ -158,7 +139,7 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
                 <div className="text-center py-16 bg-white rounded-2xl border border-gray-200/80">
                     <h3 className="text-xl font-semibold text-[#2C3E50]">No Photographers Found</h3>
                     <p className="text-[#5A6A78] mt-2">
-                        {aiFilteredIds !== null ? "AI search didn't find a match. Try rephrasing your request or clear the search to browse all." : "Try adjusting your search or filters to find more results."}
+                        Try adjusting your search or filters to find more results.
                     </p>
                 </div>
             )}

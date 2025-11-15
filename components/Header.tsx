@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, moodBoardCount, user
     }
 
   return (
-    <header className="relative bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm overflow-hidden">
+    <header className="relative bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
             <span className="text-8xl font-black text-gray-200/50 opacity-50 transform -rotate-12 select-none">
                 DEMO

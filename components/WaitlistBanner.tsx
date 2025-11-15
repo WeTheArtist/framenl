@@ -6,28 +6,32 @@ interface WaitlistBannerProps {
 
 export const WaitlistBanner: React.FC<WaitlistBannerProps> = ({ onClose }) => {
   return (
-    <div className="bg-orange-100/80 border-b border-orange-200/80 text-center p-4 relative transition-all duration-300">
+    <div className="sticky top-24 z-40 bg-orange-200 border-b border-orange-300 text-center p-5 transition-all duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="font-bold text-sm text-[#2C3E50]">
-          <span className="bg-[#FF7D6B] text-white text-xs font-bold px-2 py-1 rounded-md mr-2">DEMO</span>
-          Interested in the real framenl? Show your interest and Join our{' '}
-          <a
-            href="https://tally.so/r/Ekzplr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-[#FF7D6B] transition-colors"
-          >
-            waitlist
-          </a>
-          !
-        </p>
+        <div className="flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#E86A5A] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          <p className="font-semibold text-lg text-[#2C3E50] ml-4">
+            Interested in the real framenl? Show your interest and Join our{' '}
+            <a
+              href="https://tally.so/r/Ekzplr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-[#E86A5A] transition-colors font-bold"
+            >
+              waitlist
+            </a>
+            !
+          </p>
+        </div>
       </div>
       <button 
         onClick={onClose} 
-        className="absolute top-1/2 -translate-y-1/2 right-4 text-[#E86A5A]/70 hover:text-[#E86A5A]"
+        className="absolute top-1/2 -translate-y-1/2 right-4 text-orange-800/70 hover:text-orange-800"
         aria-label="Dismiss banner"
       >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>

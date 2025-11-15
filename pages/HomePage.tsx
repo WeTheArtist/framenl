@@ -5,7 +5,6 @@ import { CATEGORIES, TESTIMONIALS } from '../constants';
 import { PhotographerCard } from '../components/PhotographerCard';
 import { Button } from '../components/Button';
 import { StarIcon } from '../components/IconComponents';
-import { AiRecommendation } from '../components/AiRecommendation';
 import { useSeo } from '../hooks/useSeo';
 import { StructuredData } from '../components/StructuredData';
 
@@ -152,11 +151,6 @@ export const HomePage: React.FC<HomePageProps> = ({ photographers, onSearch, onV
       <Hero onSearch={onSearch} />
       <FeaturedPhotographers photographers={photographers} onViewProfile={onViewProfile} />
       <Categories onNavigate={() => onSearch('')} />
-       <div className="py-16 sm:py-24 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-            <AiRecommendation photographer={photographers[0]} />
-        </div>
-      </div>
       <Testimonials />
     </>
   );
