@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { CameraIcon, PlusCircleIcon } from '../components/IconComponents';
 import { Calendar } from '../components/Calendar';
 import type { Photographer, BookingPackage } from '../types';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface PhotographerDashboardPageProps {
     photographer: Photographer;
@@ -29,6 +30,7 @@ const allSpecialties = ['Wedding', 'Portrait', 'Corporate', 'Family', 'Events', 
 const MAX_PORTFOLIO_IMAGES = 30;
 
 export const PhotographerDashboardPage: React.FC<PhotographerDashboardPageProps> = ({ photographer, onSave }) => {
+    const { t } = useTranslation();
     const [bookedDates, setBookedDates] = useState(new Set(photographer.bookedDates));
     const [profileImagePreview, setProfileImagePreview] = useState<string | null>(photographer.profileImageUrl);
     const [portfolioPreviews, setPortfolioPreviews] = useState<string[]>(photographer.portfolioImages);
@@ -172,7 +174,7 @@ export const PhotographerDashboardPage: React.FC<PhotographerDashboardPageProps>
             otherSocial: formData.otherSocial,
         };
         onSave(updatedPhotographer);
-        alert("Profile saved! You will now be redirected to the search page to see your changes.");
+        alert(t('Dashboard_SaveSuccess'));
     };
 
 
@@ -181,58 +183,61 @@ export const PhotographerDashboardPage: React.FC<PhotographerDashboardPageProps>
             <form onSubmit={handleSaveProfile}>
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <header className="text-center mb-12">
-                        <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Photographer Dashboard</h1>
+                        <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">{t('Dashboard_Title')}</h1>
                         <p className="mt-4 max-w-2xl mx-auto text-lg text-[#5A6A78]">
-                            Create and manage your professional profile to connect with clients across the Netherlands.
+                            {t('Dashboard_Subtitle')}
                         </p>
                     </header>
 
                     <div className="space-y-8 max-w-4xl mx-auto">
-                        <DashboardSection title="Your Information" description="This is the core information clients will see first.">
+                        <DashboardSection title={t('Dashboard_Section_Info_Title')} description={t('Dashboard_Section_Info_Desc')}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <InputField label="Full Name" id="fullName" name="fullName" value={formData.fullName} onChange={handleInputChange} placeholder="e.g., Anja van der Berg" required />
-                                <InputField label="Location" id="location" name="location" value={formData.location} onChange={handleInputChange} placeholder="e.g., Amsterdam, NL" required />
+                                <InputField label={t('SignUpPage_NameLabel')} id="fullName" name="fullName" value={formData.fullName} onChange={handleInputChange} placeholder="e.g., Anja van der Berg" required />
+                                <InputField label={t('Dashboard_LocationPlaceholder')} id="location" name="location" value={formData.location} onChange={handleInputChange} placeholder={t('Dashboard_LocationPlaceholder')} required />
                             </div>
                             <div className="mt-6">
-                                <label htmlFor="bio" className="block text-sm font-medium text-[#2C3E50]">Bio / About Me</label>
-                                <textarea id="bio" name="bio" rows={5} value={formData.bio} onChange={handleInputChange} className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" placeholder="Tell clients about your style, experience, and passion..."></textarea>
+                                <label htmlFor="bio" className="block text-sm font-medium text-[#2C3E50]">{t('Dashboard_BioLabel')}</label>
+                                <textarea id="bio" name="bio" rows={5} value={formData.bio} onChange={handleInputChange} className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" placeholder={t('Dashboard_BioPlaceholder')}></textarea>
                             </div>
                         </DashboardSection>
                         
-                        <DashboardSection title="Online Presence" description="Link to your website and social media to showcase more of your work.">
+                        <DashboardSection title={t('Dashboard_Section_Presence_Title')} description={t('Dashboard_Section_Presence_Desc')}>
                              <div className="space-y-6">
-                                <InputField label="Portfolio Website" id="website" name="website" value={formData.website} onChange={handleInputChange} placeholder="https://yourwebsite.com" />
+                                <InputField label={t('Dashboard_Section_Presence_Title')} id="website" name="website" value={formData.website} onChange={handleInputChange} placeholder="https://yourwebsite.com" />
                                 <InputField label="Instagram Profile" id="instagram" name="instagram" value={formData.instagram} onChange={handleInputChange} placeholder="https://instagram.com/yourhandle" />
                                 <InputField label="Facebook Page" id="facebook" name="facebook" value={formData.facebook} onChange={handleInputChange} placeholder="https://facebook.com/yourpage" />
                                 <InputField label="TikTok" id="tiktok" name="tiktok" value={formData.tiktok} onChange={handleInputChange} placeholder="https://tiktok.com/@yourhandle" />
                                 <InputField label="YouTube" id="youtube" name="youtube" value={formData.youtube} onChange={handleInputChange} placeholder="https://youtube.com/c/yourchannel" />
                                 <InputField label="Twitter" id="twitter" name="twitter" value={formData.twitter} onChange={handleInputChange} placeholder="https://twitter.com/yourhandle" />
-                                <InputField label="Other" id="otherSocial" name="otherSocial" value={formData.otherSocial} onChange={handleInputChange} placeholder="Another relevant link" />
+                                <InputField label={t('ProfilePage_Tab_About')} id="otherSocial" name="otherSocial" value={formData.otherSocial} onChange={handleInputChange} placeholder="Another relevant link" />
                              </div>
                         </DashboardSection>
 
-                        <DashboardSection title="Manage Your Availability" description="Click on a date to mark it as booked. Click again to make it available.">
+                        <DashboardSection title={t('Dashboard_Section_Availability_Title')} description={t('Dashboard_Section_Availability_Desc')}>
                             <div className="flex justify-center">
                                 <Calendar bookedDates={bookedDates} onDateClick={handleDateClick} interactive={true} />
                             </div>
                         </DashboardSection>
 
-                        <DashboardSection title="Specialties" description="Select all that apply. This helps clients find you in search.">
+                        <DashboardSection title={t('Dashboard_Section_Specialties_Title')} description={t('Dashboard_Section_Specialties_Desc')}>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {allSpecialties.map(s => (
+                            {allSpecialties.map(s => {
+                                const specialtyKey = `Category_${s.replace(' ', '')}` as any;
+                                return (
                                     <div key={s} className="flex items-center">
                                         <input id={`specialty-${s}`} name="specialty" type="checkbox" value={s} checked={formData.specialties.has(s)} onChange={handleSpecialtyChange} className="h-4 w-4 rounded border-gray-300 text-[#FF7D6B] focus:ring-[#FF7D6B]" />
-                                        <label htmlFor={`specialty-${s}`} className="ml-3 text-sm text-[#5A6A78]">{s}</label>
+                                        <label htmlFor={`specialty-${s}`} className="ml-3 text-sm text-[#5A6A78]">{t(specialtyKey)}</label>
                                     </div>
-                            ))}
+                                )}
+                            )}
                             </div>
                         </DashboardSection>
 
-                        <DashboardSection title="Portfolio & Profile Image" description="Your images are your strongest selling point. Use high-quality work.">
+                        <DashboardSection title={t('Dashboard_Section_Images_Title')} description={t('Dashboard_Section_Images_Desc')}>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                             <div className="md:col-span-1">
-                                    <h3 className="font-semibold text-[#2C3E50]">Profile Picture</h3>
-                                    <p className="text-sm text-[#5A6A78] mt-1">A professional headshot builds trust.</p>
+                                    <h3 className="font-semibold text-[#2C3E50]">{t('Dashboard_ProfileImage_Title')}</h3>
+                                    <p className="text-sm text-[#5A6A78] mt-1">{t('Dashboard_ProfileImage_Desc')}</p>
                             </div>
                             <div className="md:col-span-2">
                                     <div className="flex items-center gap-4">
@@ -244,15 +249,15 @@ export const PhotographerDashboardPage: React.FC<PhotographerDashboardPageProps>
                                             )}
                                         </div>
                                         <input type="file" ref={profileFileInputRef} onChange={handleProfileFileChange} className="hidden" accept="image/*"/>
-                                        <Button type="button" variant="secondary" onClick={handleProfileImageUpload}>Upload Image</Button>
+                                        <Button type="button" variant="secondary" onClick={handleProfileImageUpload}>{t('Dashboard_UploadImage')}</Button>
                                     </div>
                             </div>
                         </div>
                         <hr className="my-8 border-gray-200" />
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 <div className="md:col-span-1">
-                                    <h3 className="font-semibold text-[#2C3E50]">Portfolio Gallery</h3>
-                                    <p className="text-sm text-[#5A6A78] mt-1">Upload up to {MAX_PORTFOLIO_IMAGES} images that showcase your best work.</p>
+                                    <h3 className="font-semibold text-[#2C3E50]">{t('Dashboard_Portfolio_Title')}</h3>
+                                    <p className="text-sm text-[#5A6A78] mt-1">{t('Dashboard_Portfolio_Desc', {count: MAX_PORTFOLIO_IMAGES})}</p>
                                 </div>
                                 <div className="md:col-span-2">
                                     <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
@@ -280,44 +285,44 @@ export const PhotographerDashboardPage: React.FC<PhotographerDashboardPageProps>
                                         })}
                                     </div>
                                     <input type="file" ref={portfolioFileInputRef} onChange={handlePortfolioFileChange} className="hidden" accept="image/*" multiple/>
-                                    <Button type="button" variant="secondary" className="mt-4 w-full" onClick={handlePortfolioUpload} disabled={portfolioPreviews.length >= MAX_PORTFOLIO_IMAGES}>Upload More...</Button>
+                                    <Button type="button" variant="secondary" className="mt-4 w-full" onClick={handlePortfolioUpload} disabled={portfolioPreviews.length >= MAX_PORTFOLIO_IMAGES}>{t('Dashboard_UploadMore')}</Button>
                                 </div>
                             </div>
                         </DashboardSection>
 
-                        <DashboardSection title="Packages & Pricing" description="Define your offerings. You can add multiple packages.">
+                        <DashboardSection title={t('Dashboard_Section_Packages_Title')} description={t('Dashboard_Section_Packages_Desc')}>
                             <div className="space-y-8">
                                 {formData.packages.map((pkg, index) => (
                                     <div key={pkg.id} className="space-y-6 bg-gray-50/70 p-6 rounded-lg border border-gray-200">
-                                        <h3 className="font-semibold text-lg text-[#2C3E50]">Package {index + 1}</h3>
+                                        <h3 className="font-semibold text-lg text-[#2C3E50]">{t('Dashboard_Package')} {index + 1}</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                             <div className="md:col-span-2">
-                                                <label className="block text-sm font-medium text-[#2C3E50]">Package Name</label>
+                                                <label className="block text-sm font-medium text-[#2C3E50]">{t('Dashboard_PackageName')}</label>
                                                 <input value={pkg.name} onChange={e => handlePackageChange(index, 'name', e.target.value)} type="text" placeholder="e.g., Full Day Wedding" className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
                                             </div>
                                             <div>
-                                                 <label className="block text-sm font-medium text-[#2C3E50]">Price (€)</label>
+                                                 <label className="block text-sm font-medium text-[#2C3E50]">{t('Dashboard_Price')}</label>
                                                 <input value={pkg.price} onChange={e => handlePackageChange(index, 'price', Number(e.target.value))} type="number" placeholder="e.g., 3200" className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-[#2C3E50]">Description</label>
+                                            <label className="block text-sm font-medium text-[#2C3E50]">{t('Dashboard_Description')}</label>
                                             <textarea value={pkg.description} onChange={e => handlePackageChange(index, 'description', e.target.value)} rows={2} className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" placeholder="e.g., 10 hours coverage, 500 edited photos..."></textarea>
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-[#2C3E50]">Features (one per line)</label>
+                                            <label className="block text-sm font-medium text-[#2C3E50]">{t('Dashboard_Features')}</label>
                                             <textarea value={pkg.features.join('\n')} onChange={e => handlePackageFeatureChange(index, e.target.value)} rows={3} className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" placeholder="10 hours coverage&#10;500+ Edited Photos&#10;Online Gallery"></textarea>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                             <Button type="button" variant="ghost" className="mt-4" onClick={addPackage}>
-                                <PlusCircleIcon className="w-5 h-5 mr-2" /> Add Another Package
+                                <PlusCircleIcon className="w-5 h-5 mr-2" /> {t('Dashboard_AddPackage')}
                             </Button>
                         </DashboardSection>
                         
                         <div className="flex justify-end pt-4">
-                            <Button type="submit" variant="primary" className="text-lg px-10 !py-3 font-bold">Save Profile</Button>
+                            <Button type="submit" variant="primary" className="text-lg px-10 !py-3 font-bold">{t('Dashboard_SaveButton')}</Button>
                         </div>
                     </div>
                 </div>

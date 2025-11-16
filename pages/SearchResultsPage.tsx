@@ -5,6 +5,7 @@ import { PhotographerCard } from '../components/PhotographerCard';
 import { FilterSidebar } from '../components/FilterSidebar';
 import { useSeo } from '../hooks/useSeo';
 import { StructuredData } from '../components/StructuredData';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface SearchResultsPageProps {
   photographers: Photographer[];
@@ -19,19 +20,23 @@ export interface Filters {
   rating: number | null;
 }
 
-const SearchBar: React.FC<{ query: string, onQueryChange: (query: string) => void }> = ({ query, onQueryChange }) => (
-    <div className="mb-8">
-        <input
-            type="text"
-            value={query}
-            onChange={(e) => onQueryChange(e.target.value)}
-            placeholder="Search by name, specialty, location..."
-            className="w-full px-5 py-3 rounded-full text-gray-900 bg-white border border-gray-300 focus:ring-2 focus:ring-[#FF7D6B] focus:border-[#FF7D6B]"
-        />
-    </div>
-);
+const SearchBar: React.FC<{ query: string, onQueryChange: (query: string) => void }> = ({ query, onQueryChange }) => {
+    const { t } = useTranslation();
+    return (
+        <div className="mb-8">
+            <input
+                type="text"
+                value={query}
+                onChange={(e) => onQueryChange(e.target.value)}
+                placeholder={t('SearchPage_SearchPlaceholder')}
+                className="w-full px-5 py-3 rounded-full text-gray-900 bg-white border border-gray-300 focus:ring-2 focus:ring-[#FF7D6B] focus:border-[#FF7D6B]"
+            />
+        </div>
+    );
+};
 
 export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photographers, onViewProfile, initialQuery }) => {
+  const { t } = useTranslation();
   const [filters, setFilters] = useState<Filters>({
     query: initialQuery,
     specialties: new Set(),
@@ -113,9 +118,9 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
       <StructuredData data={itemListSchema} />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Find a Photographer</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">{t('SearchPage_Title')}</h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-[#5A6A78]">
-            Showing {filteredPhotographers.length} of {photographers.length} professionals.
+            {t('SearchPage_ShowingResults', {count: filteredPhotographers.length, total: photographers.length})}
           </p>
         </div>
 
@@ -137,9 +142,9 @@ export const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ photograph
               </div>
             ) : (
                 <div className="text-center py-16 bg-white rounded-2xl border border-gray-200/80">
-                    <h3 className="text-xl font-semibold text-[#2C3E50]">No Photographers Found</h3>
+                    <h3 className="text-xl font-semibold text-[#2C3E50]">{t('SearchPage_NoResults_Title')}</h3>
                     <p className="text-[#5A6A78] mt-2">
-                        Try adjusting your search or filters to find more results.
+                        {t('SearchPage_NoResults_Subtitle')}
                     </p>
                 </div>
             )}

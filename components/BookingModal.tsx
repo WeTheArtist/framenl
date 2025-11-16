@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import type { Photographer, BookingPackage } from '../types';
 import { Button } from './Button';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface BookingModalProps {
   photographer: Photographer;
@@ -36,6 +38,7 @@ const PaymentMethodButton: React.FC<{
 );
 
 export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookingDetails, onClose, onBookingSuccess }) => {
+  const { t, language } = useTranslation();
   const [step, setStep] = useState<BookingStep>('details');
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
@@ -51,8 +54,9 @@ export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookin
   };
   
   const formatDate = (dateString: string) => {
+    const locale = `${language.toLowerCase()}-${language === 'EN' ? 'US' : language}`;
     const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-NL', options);
+    return new Date(dateString).toLocaleDateString(locale, options);
   };
   
 
@@ -61,48 +65,48 @@ export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookin
       case 'details':
         return (
           <div>
-            <h3 className="text-2xl font-bold text-center text-[#2C3E50]">Confirm Your Booking</h3>
+            <h3 className="text-2xl font-bold text-center text-[#2C3E50]">{t('BookingModal_ConfirmTitle')}</h3>
             <div className="mt-6 space-y-4 text-left">
                 <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-[#5A6A78]">Photographer</p>
+                    <p className="text-sm text-[#5A6A78]">{t('BookingModal_Photographer')}</p>
                     <p className="font-semibold text-[#2C3E50]">{photographer.name}</p>
                 </div>
                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-[#5A6A78]">Date</p>
+                    <p className="text-sm text-[#5A6A78]">{t('BookingModal_Date')}</p>
                     <p className="font-semibold text-[#2C3E50]">{formatDate(bookingDetails.date)}</p>
                 </div>
                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-[#5A6A78]">Package</p>
+                    <p className="text-sm text-[#5A6A78]">{t('BookingModal_Package')}</p>
                     <p className="font-semibold text-[#2C3E50]">{bookingDetails.pkg.name}</p>
                 </div>
                 {bookingDetails.notes && (
                     <div className="p-4 bg-gray-50 rounded-lg">
-                        <p className="text-sm text-[#5A6A78]">Your Note</p>
+                        <p className="text-sm text-[#5A6A78]">{t('BookingModal_YourNote')}</p>
                         <p className="font-normal text-gray-700 text-sm italic whitespace-pre-wrap">"{bookingDetails.notes}"</p>
                     </div>
                 )}
                 <div className="border-t pt-4 mt-4">
                      <div className="flex justify-between items-center font-bold text-xl text-[#2C3E50]">
-                        <span>Total Price</span>
+                        <span>{t('BookingModal_TotalPrice')}</span>
                         <span>€{bookingDetails.pkg.price}</span>
                     </div>
                 </div>
             </div>
             <div className="mt-8 flex justify-end gap-3">
-              <Button variant="ghost" onClick={onClose}>Cancel</Button>
-              <Button onClick={() => setStep('payment')}>Proceed to Payment</Button>
+              <Button variant="ghost" onClick={onClose}>{t('BookingModal_Cancel')}</Button>
+              <Button onClick={() => setStep('payment')}>{t('BookingModal_ProceedToPayment')}</Button>
             </div>
           </div>
         );
       case 'payment':
         return (
           <form onSubmit={handlePayment}>
-            <h3 className="text-2xl font-bold text-center text-[#2C3E50]">Secure Payment</h3>
-            <p className="text-center text-sm mt-1 text-[#5A6A78]">Total: €{bookingDetails.pkg.price}</p>
+            <h3 className="text-2xl font-bold text-center text-[#2C3E50]">{t('BookingModal_PaymentTitle')}</h3>
+            <p className="text-center text-sm mt-1 text-[#5A6A78]">{t('BookingModal_Total')}: €{bookingDetails.pkg.price}</p>
             
             <div className="mt-6 grid grid-cols-3 gap-2 border border-gray-200 rounded-lg p-1 bg-gray-50">
               <PaymentMethodButton method="card" current={paymentMethod} onClick={() => setPaymentMethod('card')}>
-                  Card
+                  {t('BookingModal_Card')}
               </PaymentMethodButton>
               <PaymentMethodButton method="ideal" current={paymentMethod} onClick={() => setPaymentMethod('ideal')}>
                   iDEAL
@@ -116,12 +120,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookin
               {paymentMethod === 'card' && (
                  <div className="space-y-4">
                     <div>
-                      <label htmlFor="card-number" className="block text-sm font-medium text-[#2C3E50]">Card Number</label>
+                      <label htmlFor="card-number" className="block text-sm font-medium text-[#2C3E50]">{t('BookingModal_CardNumber')}</label>
                       <input type="text" id="card-number" placeholder="•••• •••• •••• ••••" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                          <label htmlFor="expiry" className="block text-sm font-medium text-[#2C3E50]">Expiry Date</label>
+                          <label htmlFor="expiry" className="block text-sm font-medium text-[#2C3E50]">{t('BookingModal_ExpiryDate')}</label>
                           <input type="text" id="expiry" placeholder="MM / YY" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm" />
                       </div>
                       <div>
@@ -133,7 +137,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookin
               )}
               {paymentMethod === 'ideal' && (
                 <div>
-                   <label htmlFor="ideal-bank" className="block text-sm font-medium text-[#2C3E50]">Choose your bank</label>
+                   <label htmlFor="ideal-bank" className="block text-sm font-medium text-[#2C3E50]">{t('BookingModal_ChooseBank')}</label>
                    <select id="ideal-bank" required className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm">
                       <option>ABN AMRO</option>
                       <option>ING</option>
@@ -145,13 +149,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookin
               )}
               {paymentMethod === 'paypal' && (
                 <div className="text-center pt-8">
-                  <p className="text-[#5A6A78]">You will be redirected to PayPal to complete your payment.</p>
+                  <p className="text-[#5A6A78]">{t('BookingModal_PayPalRedirect')}</p>
                 </div>
               )}
             </div>
              <div className="mt-8 flex justify-end">
                 <Button type="submit" className="w-full text-lg !py-3" disabled={isProcessing}>
-                    {isProcessing ? 'Processing...' : `Pay €${bookingDetails.pkg.price}`}
+                    {isProcessing ? t('BookingModal_Processing') : t('BookingModal_PayButton', {price: bookingDetails.pkg.price})}
                 </Button>
              </div>
           </form>
@@ -162,12 +166,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({ photographer, bookin
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                     <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
                 </div>
-                <h3 className="mt-4 text-2xl font-bold text-[#2C3E50]">Booking Confirmed!</h3>
+                <h3 className="mt-4 text-2xl font-bold text-[#2C3E50]">{t('BookingModal_SuccessTitle')}</h3>
                 <p className="mt-2 text-[#5A6A78]">
-                    Your session with <span className="font-semibold">{photographer.name}</span> on <span className="font-semibold">{formatDate(bookingDetails.date)}</span> is booked. You will receive a confirmation email shortly.
+                    {t('BookingModal_SuccessMessage', {name: photographer.name, date: formatDate(bookingDetails.date)})}
                 </p>
                 <div className="mt-8">
-                    <Button onClick={onClose} className="w-full">Done</Button>
+                    <Button onClick={onClose} className="w-full">{t('BookingModal_Done')}</Button>
                 </div>
             </div>
         );

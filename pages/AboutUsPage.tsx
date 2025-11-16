@@ -2,8 +2,10 @@
 import React from 'react';
 import { useSeo } from '../hooks/useSeo';
 import { StructuredData } from '../components/StructuredData';
+import { useTranslation } from '../hooks/useTranslation';
 
 export const AboutUsPage: React.FC = () => {
+    const { t } = useTranslation();
     useSeo({
         title: 'About Us | framenl',
         description: "Learn about framenl's mission to connect clients with talented photographers across the Netherlands and empower creative careers."
@@ -34,21 +36,21 @@ export const AboutUsPage: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="max-w-4xl mx-auto">
             <header className="text-center mb-12">
-                <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Our Mission</h1>
+                <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">{t('About_Title')}</h1>
                 <p className="mt-4 text-2xl text-[#5A6A78] leading-snug">
-                    To make it effortless to find and book talented photographers, empowering creatives to build sustainable careers doing what they love.
+                    {t('About_Subtitle')}
                 </p>
             </header>
             
             <div className="text-lg text-[#5A6A78] space-y-6 leading-relaxed">
                 <p>
-                    framenl was born from a simple idea: the best photographers should be easy to find. In a country as rich with creativity as the Netherlands, we saw a gap between clients seeking high-quality photography and the artists ready to create it.
+                    {t('About_P1')}
                 </p>
                 <p>
-                    We are a small, passionate team based in Amsterdam, dedicated to building a platform that is beautiful, functional, and fair. For clients, we offer a curated, user-friendly experience with transparent pricing. For photographers, we provide the tools to showcase their work, manage their business, and connect with a steady stream of clients without the hassle of marketing.
+                    {t('About_P2')}
                 </p>
                 <p>
-                    Our goal is to celebrate the art of photography and the incredible talent across this country. Thank you for being a part of our community.
+                    {t('About_P3')}
                 </p>
             </div>
         </div>

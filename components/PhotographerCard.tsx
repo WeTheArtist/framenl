@@ -1,6 +1,8 @@
+
 import React from 'react';
 import type { Photographer } from '../types';
 import { StarIcon, VerifiedIcon, MapPinIcon } from './IconComponents';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface PhotographerCardProps {
   photographer: Photographer;
@@ -8,6 +10,8 @@ interface PhotographerCardProps {
 }
 
 export const PhotographerCard: React.FC<PhotographerCardProps> = ({ photographer, onViewProfile }) => {
+  const { t } = useTranslation();
+  
   const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -57,7 +61,7 @@ export const PhotographerCard: React.FC<PhotographerCardProps> = ({ photographer
         <div className="mt-auto pt-4">
             <div className="flex items-baseline justify-between">
                 <div>
-                    <span className="text-sm text-[#5A6A78]">Starting from</span>
+                    <span className="text-sm text-[#5A6A78]">{t('PhotographerCard_StartingFrom')}</span>
                     <p className="text-xl font-bold text-[#2C3E50]">€{photographer.startingPrice}</p>
                 </div>
             </div>

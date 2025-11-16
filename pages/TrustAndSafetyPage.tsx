@@ -1,4 +1,6 @@
+
 import React from 'react';
+import { useTranslation } from '../hooks/useTranslation';
 
 const InfoCard: React.FC<{ title: string, children: React.ReactNode}> = ({ title, children }) => (
     <div className="bg-white p-6 rounded-2xl border border-gray-200/80">
@@ -8,27 +10,28 @@ const InfoCard: React.FC<{ title: string, children: React.ReactNode}> = ({ title
 );
 
 export const TrustAndSafetyPage: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <div className="bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <header className="text-center mb-12">
-            <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Trust & Safety</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">{t('TrustAndSafety_Title')}</h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-[#5A6A78]">
-                Your peace of mind is our top priority. Here's how we work to keep you safe.
+                {t('TrustAndSafety_Subtitle')}
             </p>
         </header>
          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <InfoCard title="Verified Photographers">
-                Look for the verified badge on profiles. It means we've confirmed their identity and professional credentials, so you can book with confidence.
+            <InfoCard title={t('TrustAndSafety_Card1_Title')}>
+                {t('TrustAndSafety_Card1_Desc')}
             </InfoCard>
-             <InfoCard title="Secure Payments">
-                All payments are processed through a secure, encrypted system. Your financial details are never shared with photographers.
+             <InfoCard title={t('TrustAndSafety_Card2_Title')}>
+                {t('TrustAndSafety_Card2_Desc')}
             </InfoCard>
-             <InfoCard title="Authentic Reviews">
-                Read genuine reviews from past clients to make informed decisions. We verify that all reviews come from actual bookings.
+             <InfoCard title={t('TrustAndSafety_Card3_Title')}>
+                {t('TrustAndSafety_Card3_Desc')}
             </InfoCard>
-             <InfoCard title="Dedicated Support">
-                Our support team is here to help you with any questions or issues that may arise during your booking process. We've got your back.
+             <InfoCard title={t('TrustAndSafety_Card4_Title')}>
+                {t('TrustAndSafety_Card4_Desc')}
             </InfoCard>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { StarIcon, VerifiedIcon, MapPinIcon, ArrowLeftIcon, BookmarkIcon } from 
 import { Calendar } from '../components/Calendar';
 import { useSeo } from '../hooks/useSeo';
 import { StructuredData } from '../components/StructuredData';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface ProfilePageProps {
   photographer: Photographer;
@@ -17,7 +18,9 @@ interface ProfilePageProps {
 
 type ProfileTab = 'portfolio' | 'packages' | 'reviews' | 'about';
 
-const ProfileHeader: React.FC<{ photographer: Photographer }> = ({ photographer }) => (
+const ProfileHeader: React.FC<{ photographer: Photographer }> = ({ photographer }) => {
+    const { t } = useTranslation();
+    return (
     <div className="relative h-64 md:h-96 w-full">
         <img 
             src={photographer.portfolioImages[0]}
@@ -35,19 +38,21 @@ const ProfileHeader: React.FC<{ photographer: Photographer }> = ({ photographer 
                 {photographer.isVerified && (
                     <div className="flex items-center bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
                         <VerifiedIcon className="w-5 h-5 mr-2 text-white" />
-                        <span className="text-sm font-medium">Verified Professional</span>
+                        <span className="text-sm font-medium">{t('ProfilePage_Verified')}</span>
                     </div>
                 )}
             </div>
         </div>
     </div>
-);
+)};
 
 const PortfolioSection: React.FC<{ 
     photographer: Photographer;
     onAddToMoodBoard: (item: MoodBoardItem) => void;
     moodBoard: MoodBoardItem[];
-}> = ({ photographer, onAddToMoodBoard, moodBoard }) => (
+}> = ({ photographer, onAddToMoodBoard, moodBoard }) => {
+    const { t } = useTranslation();
+    return (
     <div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {photographer.portfolioImages.map((img, index) => {
@@ -62,7 +67,7 @@ const PortfolioSection: React.FC<{
                       imageUrl: img 
                     })}
                     className="absolute top-2 right-2 p-2 bg-black/40 rounded-full text-white hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity"
-                    title={isInMoodBoard ? "Added to Mood Board" : "Add to Mood Board"}
+                    title={isInMoodBoard ? t('ProfilePage_AddedToMoodboard') : t('ProfilePage_AddToMoodboard')}
                    >
                     <BookmarkIcon className="w-5 h-5" solid={isInMoodBoard} />
                    </button>
@@ -71,14 +76,16 @@ const PortfolioSection: React.FC<{
         })}
       </div>
     </div>
-);
+)};
 
-const AboutSection: React.FC<{ bio: string }> = ({ bio }) => (
+const AboutSection: React.FC<{ bio: string }> = ({ bio }) => {
+    const { t } = useTranslation();
+    return (
     <div>
-        <h3 className="text-3xl font-bold mb-4 text-[#2C3E50]">About</h3>
+        <h3 className="text-3xl font-bold mb-4 text-[#2C3E50]">{t('ProfilePage_AboutTitle')}</h3>
         <p className="text-[#5A6A78] leading-relaxed whitespace-pre-line">{bio}</p>
     </div>
-);
+)};
 
 
 const PricingSection: React.FC<{ packages: Photographer['packages'] }> = ({ packages }) => (
@@ -105,14 +112,16 @@ const PricingSection: React.FC<{ packages: Photographer['packages'] }> = ({ pack
     </div>
 );
 
-const ReviewsSection: React.FC<{ reviews: Photographer['reviews'], rating: number, reviewCount: number }> = ({ reviews, rating, reviewCount }) => (
+const ReviewsSection: React.FC<{ reviews: Photographer['reviews'], rating: number, reviewCount: number }> = ({ reviews, rating, reviewCount }) => {
+    const { t } = useTranslation();
+    return (
     <div>
         <div className="flex items-center gap-4 mb-8">
-             <h3 className="text-3xl font-bold text-[#2C3E50]">Reviews</h3>
+             <h3 className="text-3xl font-bold text-[#2C3E50]">{t('ProfilePage_ReviewsTitle')}</h3>
              <div className="flex items-center text-sm bg-gray-100 px-3 py-1 rounded-full">
                 <StarIcon className="w-4 h-4 text-[#FF7D6B] mr-1.5" />
                 <span className="font-bold">{rating.toFixed(1)}</span>
-                <span className="text-[#5A6A78] ml-1">({reviewCount} reviews)</span>
+                <span className="text-[#5A6A78] ml-1">{t('ProfilePage_ReviewsCount', {count: reviewCount})}</span>
             </div>
         </div>
         <div className="space-y-8">
@@ -131,9 +140,10 @@ const ReviewsSection: React.FC<{ reviews: Photographer['reviews'], rating: numbe
             ))}
         </div>
     </div>
-);
+)};
 
 export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, onAddToMoodBoard, moodBoard, onBookNow }) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<ProfileTab>('portfolio');
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedPackageId, setSelectedPackageId] = useState<string>(photographer.packages[0].id);
@@ -209,17 +219,17 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <button onClick={onBack} className="flex items-center text-sm font-medium text-[#5A6A78] hover:text-[#2C3E50] mb-8">
             <ArrowLeftIcon className="w-5 h-5 mr-2" />
-            Back to Search Results
+            {t('ProfilePage_BackToSearch')}
         </button>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           
           <div className="lg:col-span-2">
             <div className="border-b border-gray-200/80 mb-8">
                 <nav className="-mb-px flex space-x-6 overflow-x-auto">
-                    <TabButton tab="portfolio" label="Portfolio" />
-                    <TabButton tab="packages" label="Packages" />
-                    <TabButton tab="reviews" label="Reviews" />
-                    <TabButton tab="about" label="About" />
+                    <TabButton tab="portfolio" label={t('ProfilePage_Tab_Portfolio')} />
+                    <TabButton tab="packages" label={t('ProfilePage_Tab_Packages')} />
+                    <TabButton tab="reviews" label={t('ProfilePage_Tab_Reviews')} />
+                    <TabButton tab="about" label={t('ProfilePage_Tab_About')} />
                 </nav>
             </div>
 
@@ -233,44 +243,44 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ photographer, onBack, 
 
           <aside className="lg:col-span-1">
             <div className="sticky top-28 bg-[#FFF9F5] p-6 rounded-2xl border border-gray-200/80">
-              <h3 className="text-2xl font-bold text-center text-[#2C3E50]">Book {photographer.name}</h3>
+              <h3 className="text-2xl font-bold text-center text-[#2C3E50]">{t('ProfilePage_BookTitle', {name: photographer.name})}</h3>
               
               <div className="mt-6 space-y-4">
                  <div>
-                    <label className="block text-sm font-medium text-[#2C3E50] mb-2">1. Select a Date</label>
+                    <label className="block text-sm font-medium text-[#2C3E50] mb-2">{t('ProfilePage_SelectDate')}</label>
                     <Calendar 
                         bookedDates={new Set(photographer.bookedDates)} 
                         interactive={true}
                         onDateClick={setSelectedDate}
                         selectedDate={selectedDate}
                     />
-                    {isDateBooked && <p className="text-xs text-red-600 mt-1">This date is already booked. Please select another.</p>}
+                    {isDateBooked && <p className="text-xs text-red-600 mt-1">{t('ProfilePage_DateBooked')}</p>}
                  </div>
                  <div>
-                    <label htmlFor="package" className="block text-sm font-medium text-[#2C3E50]">2. Choose a Package</label>
+                    <label htmlFor="package" className="block text-sm font-medium text-[#2C3E50]">{t('ProfilePage_ChoosePackage')}</label>
                     <select id="package" value={selectedPackageId} onChange={e => setSelectedPackageId(e.target.value)} className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm">
                         {photographer.packages.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                     </select>
                  </div>
                  <div>
-                    <label htmlFor="notes" className="block text-sm font-medium text-[#2C3E50]">3. Add a Note (Optional)</label>
+                    <label htmlFor="notes" className="block text-sm font-medium text-[#2C3E50]">{t('ProfilePage_AddNote')}</label>
                     <textarea 
                         id="notes" 
                         rows={3}
                         value={notes}
                         onChange={e => setNotes(e.target.value)}
                         className="mt-1 block w-full rounded-lg border-gray-300 bg-white shadow-sm focus:border-[#FF7D6B] focus:ring-[#FF7D6B] sm:text-sm"
-                        placeholder="Any details for the photographer? (e.g., occasion, location ideas, number of people)"
+                        placeholder={t('ProfilePage_NotePlaceholder')}
                     ></textarea>
                  </div>
               </div>
 
               <div className="mt-8 border-t border-gray-200/80 pt-6">
                 <div className="flex justify-between items-center font-bold text-xl text-[#2C3E50]">
-                    <span>Quote Total</span>
+                    <span>{t('ProfilePage_QuoteTotal')}</span>
                     <span>€{selectedPackage.price}</span>
                 </div>
-                 <Button onClick={() => onBookNow({date: selectedDate, pkg: selectedPackage, notes})} disabled={!selectedDate || isDateBooked} className="w-full mt-4 text-lg !py-3">Request to Book</Button>
+                 <Button onClick={() => onBookNow({date: selectedDate, pkg: selectedPackage, notes})} disabled={!selectedDate || isDateBooked} className="w-full mt-4 text-lg !py-3">{t('ProfilePage_RequestToBook')}</Button>
               </div>
 
             </div>

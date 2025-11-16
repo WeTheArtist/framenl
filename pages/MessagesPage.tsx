@@ -4,6 +4,7 @@ import type { User, Conversation, Message, Photographer } from '../types';
 import { PHOTOGRAPHERS } from '../constants';
 import { Button } from '../components/Button';
 import { ChatBubbleIcon } from '../components/IconComponents';
+import { useTranslation } from '../hooks/useTranslation';
 
 // Mock Data Generation
 const generateMockConversations = (user: User, photographers: Photographer[]): Conversation[] => {
@@ -54,6 +55,7 @@ interface MessagesPageProps {
 }
 
 export const MessagesPage: React.FC<MessagesPageProps> = ({ user, onViewProfile }) => {
+    const { t } = useTranslation();
     const [conversations, setConversations] = useState<Conversation[]>(() => generateMockConversations(user, PHOTOGRAPHERS));
     const [selectedConversationId, setSelectedConversationId] = useState<string | null>(conversations.length > 0 ? conversations[0].id : null);
     const [newMessage, setNewMessage] = useState('');
@@ -91,13 +93,13 @@ export const MessagesPage: React.FC<MessagesPageProps> = ({ user, onViewProfile 
         <div className="bg-[#FFF9F5]">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <header className="mb-8">
-                    <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">Messages</h1>
+                    <h1 className="text-4xl font-bold tracking-tight text-[#2C3E50]">{t('Messages_Title')}</h1>
                 </header>
                 <div className="bg-white rounded-2xl border border-gray-200/80 shadow-lg flex h-[75vh]">
                     {/* Sidebar */}
                     <aside className="w-full md:w-1/3 border-r border-gray-200/80 flex-col md:flex hidden">
                         <div className="p-4 border-b border-gray-200/80">
-                            <h2 className="text-lg font-semibold text-[#2C3E50]">Conversations</h2>
+                            <h2 className="text-lg font-semibold text-[#2C3E50]">{t('Messages_Conversations')}</h2>
                         </div>
                         <div className="overflow-y-auto flex-grow">
                             {conversations.map(conv => (
@@ -122,7 +124,7 @@ export const MessagesPage: React.FC<MessagesPageProps> = ({ user, onViewProfile 
                                 <header className="p-4 border-b border-gray-200/80 flex items-center justify-between">
                                     <h3 className="text-xl font-bold text-[#2C3E50]">{selectedConversation.photographerName}</h3>
                                      <button onClick={() => onViewProfile(selectedConversation.photographerId)} className="text-sm font-semibold text-[#FF7D6B] hover:text-[#E86A5A]">
-                                        View Profile
+                                        {t('Messages_ViewProfile')}
                                     </button>
                                 </header>
                                 <div className="flex-grow p-6 overflow-y-auto space-y-4">
@@ -141,20 +143,20 @@ export const MessagesPage: React.FC<MessagesPageProps> = ({ user, onViewProfile 
                                             type="text"
                                             value={newMessage}
                                             onChange={(e) => setNewMessage(e.target.value)}
-                                            placeholder="Type your message..."
+                                            placeholder={t('Messages_Placeholder')}
                                             className="w-full px-4 py-2 rounded-full border-gray-300 bg-gray-100 focus:ring-[#FF7D6B] focus:border-[#FF7D6B]"
                                             aria-label="Message input"
                                         />
-                                        <Button type="submit" disabled={!newMessage.trim()}>Send</Button>
+                                        <Button type="submit" disabled={!newMessage.trim()}>{t('Messages_Send')}</Button>
                                     </form>
                                 </footer>
                             </>
                         ) : (
                             <div className="flex-grow flex flex-col items-center justify-center text-center p-8">
                                 <ChatBubbleIcon className="w-16 h-16 text-gray-300" />
-                                <h3 className="mt-4 text-xl font-semibold text-[#2C3E50]">Select a conversation</h3>
+                                <h3 className="mt-4 text-xl font-semibold text-[#2C3E50]">{t('Messages_SelectConversation_Title')}</h3>
                                 <p className="text-[#5A6A78] mt-2 max-w-sm">
-                                    Choose a conversation from the left panel to view messages or start a new one from a photographer's profile.
+                                    {t('Messages_SelectConversation_Desc')}
                                 </p>
                             </div>
                         )}

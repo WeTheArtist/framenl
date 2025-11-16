@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface CalendarProps {
   bookedDates: Set<string>; // Expecting 'YYYY-MM-DD'
@@ -9,7 +10,10 @@ interface CalendarProps {
 }
 
 export const Calendar: React.FC<CalendarProps> = ({ bookedDates, selectedDate, onDateClick, interactive = false }) => {
+  const { t, language } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
+  
+  const locale = `${language.toLowerCase()}-${language === 'EN' ? 'US' : language}`;
 
   const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
@@ -40,18 +44,23 @@ export const Calendar: React.FC<CalendarProps> = ({ bookedDates, selectedDate, o
   };
 
   const toYyyyMmDd = (date: Date) => date.toISOString().split('T')[0];
+  
+  const dayNames = [...Array(7).keys()].map(dayIndex => {
+      const date = new Date(2023, 0, dayIndex + 1); // A known Sunday is Jan 1, 2023
+      return date.toLocaleString(locale, { weekday: 'short' });
+  });
 
   return (
     <div className="bg-white p-4 rounded-lg border border-gray-200/80">
       <div className="flex items-center justify-between mb-4">
         <button onClick={() => changeMonth(-1)} className="p-2 rounded-full hover:bg-gray-100">&lt;</button>
-        <h3 className="font-semibold text-lg">
-          {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+        <h3 className="font-semibold text-lg capitalize">
+          {currentDate.toLocaleString(locale, { month: 'long', year: 'numeric' })}
         </h3>
         <button onClick={() => changeMonth(1)} className="p-2 rounded-full hover:bg-gray-100">&gt;</button>
       </div>
       <div className="grid grid-cols-7 gap-1 text-center text-sm text-gray-500">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => <div key={d}>{d}</div>)}
+        {dayNames.map(d => <div key={d}>{d}</div>)}
       </div>
       <div className="grid grid-cols-7 gap-1 mt-2">
         {renderDays().map((date, index) => {
@@ -88,9 +97,9 @@ export const Calendar: React.FC<CalendarProps> = ({ bookedDates, selectedDate, o
         })}
       </div>
        <div className="mt-4 flex items-center justify-center space-x-4 text-xs">
-          <div className="flex items-center"><span className="w-3 h-3 bg-white border rounded-full mr-1.5"></span> Available</div>
-          <div className="flex items-center"><span className="w-3 h-3 bg-gray-300 rounded-full mr-1.5"></span> Booked</div>
-          {interactive && <div className="flex items-center"><span className="w-3 h-3 bg-[#FF7D6B] rounded-full mr-1.5"></span> Selected</div>}
+          <div className="flex items-center"><span className="w-3 h-3 bg-white border rounded-full mr-1.5"></span> {t('Calendar_Available')}</div>
+          <div className="flex items-center"><span className="w-3 h-3 bg-gray-300 rounded-full mr-1.5"></span> {t('Calendar_Booked')}</div>
+          {interactive && <div className="flex items-center"><span className="w-3 h-3 bg-[#FF7D6B] rounded-full mr-1.5"></span> {t('Calendar_Selected')}</div>}
         </div>
     </div>
   );

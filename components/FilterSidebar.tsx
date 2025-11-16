@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ChevronDownIcon } from './IconComponents';
 import type { Filters } from '../pages/SearchResultsPage';
 import { Button } from './Button';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface FilterSidebarProps {
     filters: Filters;
@@ -13,6 +14,7 @@ interface FilterSidebarProps {
 const specialties = ['Wedding', 'Portrait', 'Corporate', 'Family', 'Events', 'Fashion', 'Real Estate', 'Newborn', 'Architecture', 'Concerts'];
 
 export const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterChange, onReset }) => {
+    const { t } = useTranslation();
     const [openSections, setOpenSections] = useState<Set<string>>(new Set(['specialty', 'price']));
 
     const toggleSection = (section: string) => {
@@ -63,51 +65,54 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterC
   return (
     <aside className="lg:w-72 bg-white p-6 rounded-2xl border border-gray-200/80 h-fit sticky top-28">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Filters</h2>
-        <button onClick={onReset} className="text-sm font-semibold text-[#FF7D6B] hover:text-[#E86A5A]">Reset</button>
+        <h2 className="text-xl font-bold">{t('FilterSidebar_Title')}</h2>
+        <button onClick={onReset} className="text-sm font-semibold text-[#FF7D6B] hover:text-[#E86A5A]">{t('FilterSidebar_Reset')}</button>
       </div>
       
-      <FilterSection title="Specialty" id="specialty">
+      <FilterSection title={t('FilterSidebar_Specialty')} id="specialty">
         <div className="space-y-4">
-          {specialties.map(specialty => (
-            <div key={specialty} className="flex items-center">
-              <input 
-                id={`filter-specialty-${specialty}`} 
-                name="specialty[]" 
-                type="checkbox"
-                checked={filters.specialties.has(specialty)}
-                onChange={e => handleSpecialtyChange(specialty, e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 text-[#FF7D6B] focus:ring-[#FF7D6B]" 
-              />
-              <label htmlFor={`filter-specialty-${specialty}`} className="ml-3 text-sm text-[#5A6A78]">{specialty}</label>
-            </div>
-          ))}
+          {specialties.map(specialty => {
+            const specialtyKey = `Category_${specialty.replace(' ', '')}` as any;
+            return (
+                <div key={specialty} className="flex items-center">
+                <input 
+                    id={`filter-specialty-${specialty}`} 
+                    name="specialty[]" 
+                    type="checkbox"
+                    checked={filters.specialties.has(specialty)}
+                    onChange={e => handleSpecialtyChange(specialty, e.target.checked)}
+                    className="h-4 w-4 rounded border-gray-300 text-[#FF7D6B] focus:ring-[#FF7D6B]" 
+                />
+                <label htmlFor={`filter-specialty-${specialty}`} className="ml-3 text-sm text-[#5A6A78]">{t(specialtyKey)}</label>
+                </div>
+            )
+          })}
         </div>
       </FilterSection>
 
-      <FilterSection title="Price Range" id="price">
+      <FilterSection title={t('FilterSidebar_PriceRange')} id="price">
         <div className="flex items-center space-x-2">
             <input 
                 type="number" 
-                placeholder="Min"
+                placeholder={t('FilterSidebar_Min')}
                 value={filters.price.min ?? ''}
                 onChange={e => handlePriceChange('min', e.target.value)}
                 className="w-full rounded-lg border-gray-300 bg-white text-sm focus:ring-[#FF7D6B] focus:border-[#FF7D6B]"
-                aria-label="Minimum price"
+                aria-label={t('FilterSidebar_Min')}
             />
             <span>-</span>
             <input 
                 type="number" 
-                placeholder="Max"
+                placeholder={t('FilterSidebar_Max')}
                 value={filters.price.max ?? ''}
                 onChange={e => handlePriceChange('max', e.target.value)}
                 className="w-full rounded-lg border-gray-300 bg-white text-sm focus:ring-[#FF7D6B] focus:border-[#FF7D6B]"
-                aria-label="Maximum price"
+                aria-label={t('FilterSidebar_Max')}
             />
         </div>
       </FilterSection>
 
-      <FilterSection title="Rating" id="rating">
+      <FilterSection title={t('FilterSidebar_Rating')} id="rating">
         <div className="space-y-2">
             {[4, 3, 2].map(rating => (
                  <div key={rating} className="flex items-center">
@@ -119,7 +124,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, onFilterC
                         onChange={() => handleRatingChange(rating)}
                         className="h-4 w-4 border-gray-300 text-[#FF7D6B] focus:ring-[#FF7D6B]"
                     />
-                    <label htmlFor={`filter-rating-${rating}`} className="ml-3 text-sm text-[#5A6A78]">{rating} stars & up</label>
+                    <label htmlFor={`filter-rating-${rating}`} className="ml-3 text-sm text-[#5A6A78]">{t('FilterSidebar_StarsAndUp', {stars: rating})}</label>
                 </div>
             ))}
         </div>

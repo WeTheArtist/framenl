@@ -24,6 +24,7 @@ import { UserDashboardPage } from './pages/UserDashboardPage';
 import { BookingModal } from './components/BookingModal';
 import { MessagesPage } from './pages/MessagesPage';
 import { WaitlistBanner } from './components/WaitlistBanner';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 
 export type Page = 
@@ -231,22 +232,24 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FFF9F5] min-h-screen flex flex-col text-[#2C3E50]">
-      <Header onNavigate={navigateTo} moodBoardCount={moodBoard.length} user={user} onLogout={handleLogout} />
-      {isBannerVisible && <WaitlistBanner onClose={() => setIsBannerVisible(false)} />}
-      <main className="flex-grow">
-        {renderPage()}
-      </main>
-      <Footer onNavigate={navigateTo}/>
-      {bookingState.isOpen && bookingState.photographer && bookingState.details && (
-         <BookingModal
-            photographer={bookingState.photographer}
-            bookingDetails={bookingState.details}
-            onClose={() => setBookingState({ isOpen: false, photographer: null, details: null })}
-            onBookingSuccess={handleBookingSuccess}
-        />
-      )}
-    </div>
+    <LanguageProvider>
+      <div className="bg-[#FFF9F5] min-h-screen flex flex-col text-[#2C3E50]">
+        <Header onNavigate={navigateTo} moodBoardCount={moodBoard.length} user={user} onLogout={handleLogout} />
+        {isBannerVisible && <WaitlistBanner onClose={() => setIsBannerVisible(false)} />}
+        <main className="flex-grow">
+          {renderPage()}
+        </main>
+        <Footer onNavigate={navigateTo}/>
+        {bookingState.isOpen && bookingState.photographer && bookingState.details && (
+          <BookingModal
+              photographer={bookingState.photographer}
+              bookingDetails={bookingState.details}
+              onClose={() => setBookingState({ isOpen: false, photographer: null, details: null })}
+              onBookingSuccess={handleBookingSuccess}
+          />
+        )}
+      </div>
+    </LanguageProvider>
   );
 };
 

@@ -1,10 +1,13 @@
+
 import React from 'react';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface WaitlistBannerProps {
   onClose: () => void;
 }
 
 export const WaitlistBanner: React.FC<WaitlistBannerProps> = ({ onClose }) => {
+  const { t } = useTranslation();
   return (
     <div className="sticky top-24 z-40 bg-orange-200 border-b border-orange-300 text-center p-5 transition-all duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,14 +16,14 @@ export const WaitlistBanner: React.FC<WaitlistBannerProps> = ({ onClose }) => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
           <p className="font-semibold text-lg text-[#2C3E50] ml-4">
-            Interested in the real framenl? Show your interest and Join our{' '}
+            {t('Waitlist_Text')}{' '}
             <a
               href="https://tally.so/r/Ekzplr"
               target="_blank"
               rel="noopener noreferrer"
               className="underline hover:text-[#E86A5A] transition-colors font-bold"
             >
-              waitlist
+              {t('Waitlist_Link')}
             </a>
             !
           </p>
