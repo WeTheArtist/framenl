@@ -29,7 +29,7 @@ const SearchBar: React.FC<{ query: string, onQueryChange: (query: string) => voi
                 value={query}
                 onChange={(e) => onQueryChange(e.target.value)}
                 placeholder={t('SearchPage_SearchPlaceholder')}
-                className="w-full px-5 py-3 rounded-full text-gray-900 bg-white border border-gray-300 focus:ring-2 focus:ring-[#FF7D6B] focus:border-[#FF7D6B]"
+                className="w-full px-4 py-2 rounded-full text-gray-900 bg-white border border-gray-300 focus:ring-2 focus:ring-[#FF7D6B] focus:border-[#FF7D6B]"
             />
         </div>
     );

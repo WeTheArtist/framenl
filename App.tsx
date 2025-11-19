@@ -189,8 +189,8 @@ const App: React.FC = () => {
             return null;
         }
       case 'photographerDashboard': {
-        // The demo dashboard always edits the first photographer
-        const photographerToEdit = photographers.find(p => p.id === '1') || photographers[0]; 
+        // The demo dashboard always edits the first photographer (Lars for B2B demo context)
+        const photographerToEdit = photographers.find(p => p.id === '2') || photographers[0]; 
         return <PhotographerDashboardPage photographer={photographerToEdit} onSave={handleUpdatePhotographer} />;
       }
       case 'userDashboard':
@@ -233,7 +233,7 @@ const App: React.FC = () => {
 
   return (
     <LanguageProvider>
-      <div className="bg-[#FFF9F5] min-h-screen flex flex-col text-[#2C3E50]">
+      <div className="bg-[#FFF9F5] min-h-screen flex flex-col text-[#1E293B]">
         <Header onNavigate={navigateTo} moodBoardCount={moodBoard.length} user={user} onLogout={handleLogout} />
         {isBannerVisible && <WaitlistBanner onClose={() => setIsBannerVisible(false)} />}
         <main className="flex-grow">
